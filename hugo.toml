@@ -1,0 +1,4 @@
+baseURL = 'https://xiaoweiwei.github.io/'
+languageCode = 'zh-cn'
+title = '肖卫卫的博客'
+theme = 'ananke'
