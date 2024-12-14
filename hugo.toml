@@ -1,7 +1,7 @@
 baseURL = "https://xiao2shiqi.github.io/"
 languageCode = 'zh-cn'
-title = '肖卫卫的博客'
-theme = 'ananke'
+title = '肖卫卫的个人博客'
+theme = 'PaperMod'
 [params]
     subtitle = '一个安静写字✍🏻的地方'
     [params.contact]
