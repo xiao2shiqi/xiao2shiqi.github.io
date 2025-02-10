@@ -1,9 +1,50 @@
 baseURL = "https://xiao2shiqi.github.io/"
-languageCode = 'zh-cn'
-title = '肖卫卫的 Blog'
-theme = 'PaperMod'
+languageCode = "zh-cn"
+title = "肖卫卫的 Blog"
+theme = "PaperMod"
+
 [params]
-    subtitle = '一个安静写字的地方'
-    [params.contact]
-    email = 'xiaobin.phoenix@gmil.com'
-    phone = '+1 202-555-1212'
+    # 禁用 profileMode，改用普通主页模式
+    defaultTheme = "auto"
+    ShowShareButtons = true
+    ShowReadingTime = true
+    displayFullLangName = true
+    ShowPostNavLinks = true
+    ShowBreadCrumbs = true
+    ShowCodeCopyButtons = true
+    
+    # 主页顶部介绍文字
+    [params.homeInfoParams]
+    Title = "�� Welcome to My Blog"
+    Content = "Hi, 我是肖卫卫。这里记录我的技术笔记和思考。"
+
+    # 社交图标，会显示在顶部介绍下方
+    [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/你的用户名"
+
+    [[params.socialIcons]]
+    name = "email"
+    url = "mailto:xiaobin.phoenix@gmail.com"
+
+    [[params.socialIcons]]
+    name = "rss"
+    url = "index.xml"
+
+[menu]
+    [[menu.main]]
+        name = "Posts"
+        url = "/posts"
+        weight = 1
+    [[menu.main]]
+        name = "Archive"
+        url = "/archives"
+        weight = 2
+    [[menu.main]]
+        name = "Search"
+        url = "/search"
+        weight = 3
+    [[menu.main]]
+        name = "Tags"
+        url = "/tags"
+        weight = 4
