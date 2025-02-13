@@ -21,19 +21,7 @@ title = '基本的访问和授权模型：OAuth2 和 RBAC 的组合应用'
 
 RBAC（角色基础访问控制）是一种常见的权限管理方式。在这种模型中，系统根据用户的角色来分配权限，而不是直接分配给单个用户。这样可以简化权限管理和配置的复杂性。避免频繁的对用户进行权限操作。如下：
 
-```mermaid
-sequenceDiagram
-    participant U as 用户
-    participant R as 角色
-    participant P as 权限
-    participant Rsrc as 资源
-
-    U->>R: 请求分配角色
-    R->>P: 拥有权限
-    P->>Rsrc: 访问资源
-    note right of U: 用户通过角色获得权限
-    note right of R: 角色通过权限访问资源
-```
+![image-20250213135233056](https://s2.loli.net/2025/02/13/D5Prx9flHERhJbz.png)
 
 如果还有更复杂的访问控制需求，则可以在 RBAC0 的基础上可以扩展 RBAC1 （层次化 RBAC，角色之间有继承关系）和 RBAC2（受约束的 RBAC，角色之间有互斥关系）来提高系统的安全性和管理的便利性。还有 RBAC 3 等等。
 
@@ -60,24 +48,7 @@ OAuth2 通过发放访问令牌（Access Token）和刷新令牌来实现对受�
 
 授权码模式可以说是最安全的授权模式，综合考虑了各种风险和防范措置，但相对也是最复杂的授权协议，适合有服务端可以存储密钥（ClientSecret）的场景，授权流程如下：
 
-```mermaid
-sequenceDiagram
-    participant 用户 as 用户
-    participant 客户端 as 客户端应用
-    participant 授权服务器 as 授权服务器
-    participant 资源服务器 as 资源服务器
-
-    用户->>+客户端: 访问客户端应用
-    客户端->>+授权服务器: 请求授权码
-    授权服务器->>+用户: 请求登录和授权
-    用户->>+授权服务器: 提供凭证并授权
-    授权服务器->>+客户端: 返回授权码
-    客户端->>+授权服务器: 使用授权码请求访问令牌
-    授权服务器->>+客户端: 发放访问令牌和刷新令牌
-    客户端->>+资源服务器: 使用访问令牌请求用户数据
-    资源服务器->>+客户端: 返回用户数据
-
-```
+![image-20250213135257673](https://s2.loli.net/2025/02/13/yTxcfGC2bIrQ6Ds.png)
 
 看完授权码的过程，你可能会觉得好奇：**为什么授权服务器要返回授权码，而不直接返回令牌呢 ？**
 
@@ -95,22 +66,7 @@ sequenceDiagram
 
 隐式授权模式对于实在没有服务端存储 ClientSecret 的纯前端应用提供接入支持。接入流程也比较简单，如下：
 
-```mermaid
-sequenceDiagram
-    participant 用户 as 用户
-    participant 客户端 as 客户端应用
-    participant 授权服务器 as 授权服务器
-    participant 资源服务器 as 资源服务器
-
-    用户->>+客户端: 访问客户端应用
-    客户端->>+授权服务器: 请求授权码
-    授权服务器->>+用户: 请求登录和授权
-    用户->>+授权服务器: 提供凭证并授权
-    授权服务器->>+客户端: 发放访问令牌
-    客户端->>+资源服务器: 使用访问令牌请求用户数据
-    资源服务器->>+客户端: 返回用户数据
-
-```
+![image-20250213135355834](https://s2.loli.net/2025/02/13/GIdCurElvxVnMPS.png)
 
 该模式下用户认证通过后授权服务器就直接向客户端返回令牌，无需应用提供 ClientSecret 和通过授权码获取令牌的步骤。但是代价是安全等级降低，令牌有可能在重定向的时候暴露给攻击者。
 
@@ -128,18 +84,7 @@ sequenceDiagram
 
 主要是用于一些非浏览器的接入场景，如果要采用密码模式，那“第三方”属性就必须弱化，把“第三方”视作是系统中与授权服务器相对独立的子模块，在物理上独立于授权服务器部署，但是在逻辑上与授权服务器仍同属一个系统，这样将认证和授权一并完成的密码模式才会有合理的应用场景：
 
-```mermaid
-sequenceDiagram
-    participant User as 用户
-    participant Client as 客户端
-    participant Server as 授权服务器
-
-    User->>Client: 提供用户名和密码
-    Client->>Server: 请求访问令牌（用户名和密码）
-    Server->>Client: 返回访问令牌
-    Client->>Server: 使用访问令牌请求受保护的资源
-    Server->>Client: 提供受保护的资源
-```
+![image-20250213135416828](https://s2.loli.net/2025/02/13/RTW1sdLK387SlIO.png)
 
 密码模式非常简单，就是拿着用户名和密码向授权服务器换令牌而已。在密码模式下 OAuth2 不负责保障安全，只能由用户和第三方应用来自行提供安全保障。
 
@@ -149,15 +94,6 @@ sequenceDiagram
 
 以应用为主体的授权模式，不涉及到用户的登录行为，是客户端模式是指第三方应用以自己的名义，向授权服务器申请许可凭证。用来访问受保护资源，如下：
 
-```mermaid
-sequenceDiagram
-    participant Client as 客户端
-    participant Server as 授权服务器
-
-    Client->>Server: 提供客户端凭据（客户端ID和密钥）
-    Server->>Client: 验证凭据并返回访问令牌
-    Client->>Server: 使用访问令牌请求受保护的资源
-    Server->>Client: 提供受保护的资源
-```
+![image-20250213135436859](https://s2.loli.net/2025/02/13/etPQIj3qy8gF7uW.png)
 
 客户端模式通常是用于微服务之间的访问，例如一些定时任务，应用之间访问授权的操作。在微服务架构并不提倡同一个系统的各服务间有默认的信任关系，所以服务之间调用也需要先进行认证授权，然后才能通信。例如应用层常见的微服务框架 `Spring Cloud` 就是采用该方案保证服务间的合法调用。
