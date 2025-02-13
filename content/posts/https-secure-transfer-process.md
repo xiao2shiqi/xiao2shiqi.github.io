@@ -24,7 +24,7 @@ title = 'hppts 传输加密过程的探索'
 
 #### 对称型密钥
 
-<img src="https://s2.loli.net/2025/02/13/oJPagjRvX3O1uZb.jpg" alt="对称加密" style="zoom: 33%;">
+![对称加密](https://s2.loli.net/2025/02/13/oJPagjRvX3O1uZb.jpg)
 
 对称型密钥加密的基本原理是将明文数据通过一个加密算法和一个密钥转换成密文，然后接收方使用相同的密钥和解密算法将密文还原成原始的明文。由于加密和解密都使用同一个密钥，因此被称为对称加密。对称型密钥加密算法的特点是算法简单、速度快，适合于大量数据的加密。常见的对称型密钥加密算法包括：**AES (Advanced Encryption Standard)**、**DES (Data Encryption Standard)**、**3DES (Triple DES)**。
 
@@ -35,7 +35,7 @@ title = 'hppts 传输加密过程的探索'
 
 #### 非对称型密钥
 
-<img src="https://s2.loli.net/2025/02/13/LSTVGgFCwNEM3dP.png" alt="非对称加密" style="zoom: 33%;">
+![非对称加密](https://s2.loli.net/2025/02/13/LSTVGgFCwNEM3dP.png)
 
 非对称型密钥加密，也称为公钥加密或双密钥加密，是一种使用两个不同密钥的加密方法：一个用于加密（称为公钥），另一个用于解密（称为私钥）。公钥可以公开分享，而私钥则必须保密。
 
@@ -74,11 +74,11 @@ title = 'hppts 传输加密过程的探索'
 
 CA 认证中心是负责给计算机的服务端颁发数字证书（Certificate）的机构，类似于上面例子中给警察颁发证件的权威机构类似。当客户端访问服务端时，会检查服务端的证书是有效，确认无误后才会建立安全链接。
 
-<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f5d44acf026b4367b77b07bf567e2e33~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=790&#x26;h=528&#x26;s=70813&#x26;e=png&#x26;b=fdfdfd" alt="安全链接标识" style="zoom:50%;">
+![安全链接标识](https://s2.loli.net/2025/02/13/vNJxOcLuSWqi2aH.png)
 
 服务端的 PKI 证书是遵循 X.509 标准，证书包含了用于 SSL/TLS 通信的信息，具体如下：
 
-<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/915e86f9832944e8adae8f43cdd56cf3~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1180&#x26;h=1412&#x26;s=208395&#x26;e=png&#x26;a=1&#x26;b=fbfbfb" alt="数字证书" style="zoom:50%;">
+![数字证书](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/915e86f9832944e8adae8f43cdd56cf3~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1180&#x26;h=1412&#x26;s=208395&#x26;e=png&#x26;a=1&#x26;b=fbfbfb)
 
 1.  **版本**：指出该证书使用了哪种版本的 X.509 标准（版本 1、版本 2 或是版本 3）
 2.  **序列号**：由 CA 分配的证书唯一的标识符。
@@ -101,7 +101,7 @@ CA 认证中心是负责给计算机的服务端颁发数字证书（Certificate
 
 TLS 在传输之前的握手过程一共需要进行上下两轮、共计四次通信，通过混合使用非对称加密交换密钥，使用对称加密传输信息的方式保障通信安全。如图：
 
-<img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/69e0a3930cee4595ab0443f4dc6273d3~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=866&#x26;h=694&#x26;s=44263&#x26;e=png&#x26;b=ffffff" alt="TLS 四次握手" style="zoom: 50%;">
+![TLS 四次握手](https://s2.loli.net/2025/02/13/8xXKaDHfkt15Ndm.png)
 
 1.  **客户端发送 ClientHello 消息**：客户端以明文的方式向服务器发送一个 ClientHello 消息，该消息包括客户端支持的 TLS 版本、加密算法列表（密码套件）、会话ID（用于会话恢复）和客户端生成的随机数。
 2.  **服务器回应 ServerHello 消息**：服务器选择一个共同的 TLS 版本和密码套件，并向客户端发送 ServerHello 消息。此消息包括服务器生成的随机数和会话ID，
