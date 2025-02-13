@@ -1,6 +1,6 @@
 +++
 date = '2023-12-13T14:09:57+08:00'
-draft = true
+draft = false
 title = '理解 Kubernetes 的 Controller Manager'
 tags = ["云原生"]
 +++
