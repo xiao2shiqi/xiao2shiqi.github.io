@@ -1,7 +1,7 @@
 +++
 date = '2025-02-07T18:50:47+08:00'
 draft = false
-title = '解读 DeepSeek-R1 论文 - 通俗易懂版'
+title = 'DeepSeek-R1 论文解读（通俗易懂版）'
 +++
 
 ### 引言：让 AI 学会"思考"的新突破
