@@ -2,6 +2,7 @@
 date = '2023-11-25T14:29:56+08:00'
 draft = false
 title = '理解 Kubernetes 的 Etcd'
+tags = ["云原生"]
 +++
 
 ### 概述

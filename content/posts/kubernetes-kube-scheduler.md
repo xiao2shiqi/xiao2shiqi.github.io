@@ -2,6 +2,7 @@
 date = '2023-11-29T14:21:48+08:00'
 draft = true
 title = '理解 Kubernetes 的 Scheduler'
+tags = ["云原生"]
 +++
 
 ## 概述

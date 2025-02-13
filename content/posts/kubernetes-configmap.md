@@ -2,6 +2,7 @@
 date = '2023-11-16T14:35:01+08:00'
 draft = false
 title = '理解 Kubernetes 的 Configmap'
+tags = ["云原生"]
 +++
 
 ### 安装说明
