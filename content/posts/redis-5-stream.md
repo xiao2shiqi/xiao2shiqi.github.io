@@ -1,8 +1,8 @@
 +++
 date = '2023-04-17T14:24:51+08:00'
 draft = false
-title = 'Redis 5.0 新特性：stream 更完善的消息队列'
-tags = ["Redis"]
+title = 'Redis Stream：更完善的消息队列'
+tags = ["Redis", "数据库"]
 +++
 
 

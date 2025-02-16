@@ -1,7 +1,7 @@
 +++
 date = '2023-06-05T14:39:11+08:00'
 draft = false
-title = 'ChatGPT 和其他大模型的 Prompt 使用技巧 Chatgpt'
+title = '大模型的 Prompt 使用技巧'
 tags = ["人工智能"]
 +++
 
