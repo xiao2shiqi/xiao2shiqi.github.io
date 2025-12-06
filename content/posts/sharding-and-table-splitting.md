@@ -1,10 +1,8 @@
 +++
 title = 'ShardingSphere 分库分表后，如何维护多库多表和元数据之间的一致性？'
-date = '2025-02-24T00:00:00+08:00'
-draft = true
-cover = '/posts/03/assets/unnamed-5008449.jpg'
-description = '如何优雅地管理成百上千的数据库和表？'
-author = '肖卫卫'
+date = '2025-12-06T00:00:00+08:00'
+draft = false
+tags = ["架构"]
 +++
 
 ### 前言：分库分表后的“第二天”难题
