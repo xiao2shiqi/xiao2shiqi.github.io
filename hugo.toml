@@ -3,7 +3,12 @@ languageCode = "zh-cn"
 title = "肖卫卫的 Blog"
 theme = "PaperMod"
 
+# 分页配置
+[pagination]
+    pagerSize = 10  # 每页显示的文章数量
+
 [params]
+    ShowPageNums = true  # 显示页码 (当前页/总页数)
     # 禁用 profileMode，改用普通主页模式
     defaultTheme = "auto"
     ShowShareButtons = true
@@ -16,7 +21,7 @@ theme = "PaperMod"
     # 主页顶部介绍文字
     [params.homeInfoParams]
     Title = "Welcome to My Blog"
-    Content = "Hi, 我是肖卫卫。这里记录我的技术笔记和思考。"
+    Content = "Hi, 我是肖卫卫。这里记录我的技术笔记和思考。<br><br>📱 联系方式：微信（手机号同号）: **18198971094**"
 
     # 社交图标，会显示在顶部介绍下方
     [[params.socialIcons]]
@@ -30,6 +35,11 @@ theme = "PaperMod"
     [[params.socialIcons]]
     name = "email"
     url = "mailto:xiaobin.phoenix@gmail.com"
+
+    [[params.socialIcons]]
+    name = "wechat"
+    title = "微信: 18198971094"
+    url = "#"
 
     # [[params.socialIcons]]
     # name = "rss"
