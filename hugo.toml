@@ -3,6 +3,10 @@ languageCode = "zh-cn"
 title = "肖卫卫的 Blog"
 theme = "PaperMod"
 
+# 启用搜索功能
+[outputs]
+    home = ["HTML", "RSS", "JSON"]
+
 # 分页配置
 [pagination]
     pagerSize = 10  # 每页显示的文章数量
@@ -11,6 +15,17 @@ theme = "PaperMod"
     ShowPageNums = true  # 显示页码 (当前页/总页数)
     # 禁用 profileMode，改用普通主页模式
     defaultTheme = "auto"
+    
+    # 启用搜索功能
+    [params.fuseOpts]
+        isCaseSensitive = false
+        shouldSort = true
+        location = 0
+        distance = 1000
+        threshold = 0.2  # 降低阈值，提高精确度（0-1，越小越精确）
+        minMatchCharLength = 2  # 最小匹配字符长度
+        limit = 10  # 限制最多显示10个结果
+        keys = ["title", "permalink", "summary"]  # 移除 content 避免重复匹配
     ShowShareButtons = true
     ShowReadingTime = true
     displayFullLangName = true
@@ -54,3 +69,7 @@ theme = "PaperMod"
         name = "Tags"
         url = "/tags"
         weight = 2
+    [[menu.main]]
+        name = "Search"
+        url = "/search"
+        weight = 3
