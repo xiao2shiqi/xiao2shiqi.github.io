@@ -36,7 +36,11 @@ theme = "PaperMod"
     # 主页顶部介绍文字
     [params.homeInfoParams]
     Title = "Welcome to My Blog"
+<<<<<<< HEAD
     Content = "Hi, 我是肖卫卫。这里记录我的技术笔记和思考。<br><br>📱 联系方式：微信（手机号同号）: **18198971094**"
+=======
+    Content = "Hi, I am Xiao Bin. Here I record my technical notes and thoughts."
+>>>>>>> c257f48 (to english)
 
     # 社交图标，会显示在顶部介绍下方
     [[params.socialIcons]]
