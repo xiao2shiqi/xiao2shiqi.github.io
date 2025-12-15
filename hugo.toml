@@ -1,6 +1,6 @@
 baseURL = "https://xiao2shiqi.github.io/"
 languageCode = "zh-cn"
-title = "肖卫卫的 Blog"
+title = "Xiao Bin's blog"
 theme = "PaperMod"
 
 # 启用搜索功能
@@ -36,12 +36,7 @@ theme = "PaperMod"
     # 主页顶部介绍文字
     [params.homeInfoParams]
     Title = "Welcome to My Blog"
-<<<<<<< HEAD
-    Content = "Hi, 我是肖卫卫。这里记录我的技术笔记和思考。<br><br>📱 联系方式：微信（手机号同号）: **18198971094**"
-=======
-    Content = "Hi, I am Xiao Bin. Here I record my technical notes and thoughts."
->>>>>>> c257f48 (to english)
-
+    Content = "Hi, I am Xiao Bin. Here I record my technical notes and thoughts.<br><br>📱 Contact Information: WeChat (phone number the same): 18198971094"
     # 社交图标，会显示在顶部介绍下方
     [[params.socialIcons]]
     name = "x"  # PaperMod 主题支持 X (原 Twitter) 图标
@@ -57,7 +52,7 @@ theme = "PaperMod"
 
     [[params.socialIcons]]
     name = "wechat"
-    title = "微信: 18198971094"
+    title = "WeChat: 18198971094"
     url = "#"
 
     # [[params.socialIcons]]

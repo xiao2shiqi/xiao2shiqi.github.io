@@ -3,7 +3,7 @@ title = 'Spring 事务管理解析'
 date = 2025-11-19T00:00:00+08:00
 draft = false
 description = '本文深入探讨 Spring 声明式事务的使用场景、核心配置、AOP 机制、关键注解属性以及常见陷阱与实践'
-author = '肖卫卫'
+author = 'Xiaobin'
 tags = ['Spring','Transaction','事务管理']
 +++
 
