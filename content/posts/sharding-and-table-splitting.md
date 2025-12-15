@@ -1,5 +1,5 @@
 +++
-title = 'How to Maintain Consistency Between Multiple Databases, Tables, and Metadata After Database and Table Sharding?'
+title = 'Consistency in Sharded Databases and Tables'
 date = '2025-12-06T00:00:00+08:00'
 draft = false
 tags = ["Architecture"]

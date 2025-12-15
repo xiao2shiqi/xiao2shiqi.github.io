@@ -1,50 +1,50 @@
 +++
 date = '2025-12-07T00:00:00+08:00'
 draft = false
-title = '理解乐观锁 CAS 的非阻塞同步机制'
-tags = ["并发编程", "Java"]
-description = '不用锁，如何保证并发安全 ？'
+title = 'Understanding the Non-Blocking Synchronization Mechanism of Optimistic Locking CAS'
+tags = ["Concurrent Programming", "Java"]
+description = 'How to ensure concurrent safety without locks?'
 +++
 
-在并发编程的世界里，"线程安全"通常意味着"加锁"。从 `synchronized` 关键字到 `ReentrantLock`，我们习惯了通过独占资源来保证数据的一致性。然而，锁并非银弹。在追求极致性能的场景下，锁带来的上下文切换和等待成本可能成为系统的瓶颈。那么，有没有一种方法，既不需要让线程挂起（阻塞），又能保证多线程安全地修改共享变量？
+In the world of concurrent programming, "thread safety" usually means "locking". From the `synchronized` keyword to `ReentrantLock`, we've grown accustomed to ensuring data consistency by exclusively locking resources. However, locks are not a silver bullet. In scenarios pursuing extreme performance, the context switching and waiting costs brought by locks can become system bottlenecks. So, is there a way to safely modify shared variables across multiple threads without suspending (blocking) threads?
 
-答案是肯定的。这就是 原子变量 与 非阻塞同步算法（Non-blocking Algorithms）。也就是常说的乐观锁。
+The answer is yes. This is **atomic variables** and **non-blocking synchronization algorithms (Non-blocking Algorithms)**, commonly known as optimistic locking.
 
-## 一、锁的代价
+## Part I: The Cost of Locks
 
-在传统的并发模型中，我们主要依赖阻塞锁（Blocking Locks）。这种机制也被称为悲观锁：它假设最坏的情况，认为如果不锁住资源，别的线程一定会来捣乱。虽然锁能确保安全，但在高并发场景下，它带来了两个显著的性能杀手：
+In traditional concurrency models, we primarily rely on blocking locks. This mechanism is also called pessimistic locking: it assumes the worst-case scenario, believing that if resources aren't locked, other threads will definitely cause trouble. Although locks can ensure safety, in high-concurrency scenarios, they bring two significant performance killers:
 
-1. **线程挂起与恢复的开销**：当一个线程获取不到锁时，它会被阻塞（挂起）。操作系统在挂起和恢复线程时，需要进行上下文切换，这在高性能场景下是极其昂贵的操作。
-2. **活跃性问题**：阻塞锁可能导致死锁（Deadlock）、优先级反转（Priority Inversion）以及线程饥饿。
+1. **Thread Suspension and Recovery Overhead**: When a thread cannot acquire a lock, it is blocked (suspended). The operating system needs to perform context switching when suspending and resuming threads, which is an extremely expensive operation in high-performance scenarios.
+2. **Liveness Issues**: Blocking locks can lead to deadlocks, priority inversion, and thread starvation.
 
 ![Gemini_Generated_Image_myqg4emyqg4emyqg](/images/posts/understanding-optimistic-locking-cas/Gemini_Generated_Image_myqg4emyqg4emyqg.png)
 
-如果是简单的计数器累加操作，为了这就把线程挂起再恢复，就像是为了喝一杯水而关停整个城市的供水系统一样，成本极其不匹配。在面对整数和对象引用变更这种场景，我们需要的，是一种更轻量级、更“乐观”的方法。
+For simple counter increment operations, suspending and resuming threads for this purpose is like shutting down an entire city's water supply system just to drink a glass of water—the cost is extremely disproportionate. For scenarios involving integer and object reference changes, what we need is a lighter-weight, more "optimistic" approach.
 
-## 二、 硬件级的原子武器：CAS
+## Part II: Hardware-Level Atomic Weapon: CAS
 
-Java 5.0 引入了 `java.util.concurrent` 包，其中的原子类（如 `AtomicInteger`）和非阻塞数据结构（如 `ConcurrentLinkedQueue`）带来性能飞跃的秘密武器，就是 **CAS（Compare-And-Swap）** 指令。
+Java 5.0 introduced the `java.util.concurrent` package. The secret weapon behind the performance leap of atomic classes (such as `AtomicInteger`) and non-blocking data structures (such as `ConcurrentLinkedQueue`) is the **CAS (Compare-And-Swap)** instruction.
 
-**什么是 CAS ？**
+**What is CAS?**
 
-CAS 是一种硬件原语，它由 CPU 的指令集直接支持（如 x86 的 `lock cmpxchg`）。它体现了一种乐观锁的哲学：我不加锁，我直接尝试更新；如果更新失败（说明被人抢先了），我再重试或者放弃，但我绝不挂起自己。
+CAS is a hardware primitive directly supported by CPU instruction sets (such as x86's `lock cmpxchg`). It embodies the philosophy of optimistic locking: I don't lock, I directly attempt to update; if the update fails (meaning someone else got there first), I retry or give up, but I never suspend myself.
 
-CAS 的操作包含三个核心步骤：
+CAS operations consist of three core steps:
 
-1. 读取旧值（Old Value）：我看一眼当前内存里的值是多少。
-2. 比较（Compare）：在准备写入时，我再看一眼，现在内存里的值还是我刚才看到的那个吗？
-3. 交换（Swap）：如果是，我就把它更新为新值（New Value）；如果不是，说明这期间有别的线程改过它，我这次操作失败。
+1. **Read Old Value**: I take a look at what the current value in memory is.
+2. **Compare**: When preparing to write, I take another look—is the value in memory still the same one I saw earlier?
+3. **Swap**: If yes, I update it to the new value (New Value); if not, it means another thread modified it during this time, and my operation fails.
 
 ![Gemini_Generated_Image_d9qq9wd9qq9wd9qq](/images/posts/understanding-optimistic-locking-cas/Gemini_Generated_Image_d9qq9wd9qq9wd9qq.png)
 
-我们可以用一段 Java 代码来模拟 CAS 的逻辑（注意：真实 CAS 是无锁的 CPU 指令，这里用 synchronized 只是为了模拟其原子性语义：
+We can use a piece of Java code to simulate CAS logic (Note: Real CAS is a lock-free CPU instruction; using `synchronized` here is only to simulate its atomic semantics):
 
 ```java
 @ThreadSafe
 public class SimulatedCAS {
     @GuardedBy("this") private int value;
 
-    // 只有当内存中的 value 等于 expectedValue 时，才将其更新为 newValue
+    // Only update to newValue if the value in memory equals expectedValue
     public synchronized int compareAndSwap(int expectedValue, int newValue) {
         int oldValue = value;
         if (oldValue == expectedValue)
@@ -54,60 +54,60 @@ public class SimulatedCAS {
 }
 ```
 
-**为什么 CAS 比锁快？**
+**Why is CAS Faster Than Locks?**
 
-锁的成本是**等待**（线程阻塞），而 CAS 的成本是**重试**（CPU 空转）。在大多数情况下，对于 CPU 而言，重试几条指令的成本远比将线程挂起并调度的成本要低得多。
+The cost of locks is **waiting** (thread blocking), while the cost of CAS is **retrying** (CPU spinning). In most cases, for the CPU, the cost of retrying a few instructions is much lower than the cost of suspending and scheduling threads.
 
-要使用 CAS，你必须满足两个前提条件：
+To use CAS, you must meet two prerequisites:
 
-1. **持有旧值（Old Value）**：你必须知道你基于哪个版本的数据在做修改。
-2. **能计算出新值（New Value）**：CAS 是“比较+替换”，你必须在操作前就把新值准备好。
+1. **Hold the Old Value**: You must know which version of data you're modifying based on.
+2. **Be Able to Calculate the New Value**: CAS is "compare + replace"; you must prepare the new value before the operation.
 
-在掌握了 CAS，我们就可以构建**非阻塞算法（Non-blocking Algorithm）**。这种算法的特点是：某个线程的失败或挂起，不会导致其他线程也无法工作。
+Once we master CAS, we can build **non-blocking algorithms (Non-blocking Algorithms)**. The characteristic of such algorithms is: the failure or suspension of one thread does not prevent other threads from working.
 
-以一个 **非阻塞栈（Treiber Stack）** 的入栈（push）操作为例，我们可以看到 CAS 是如何工作的：
+Taking a **non-blocking stack (Treiber Stack)** push operation as an example, we can see how CAS works:
 
-1. **读取**：获取当前栈顶节点 `oldHead`。
-2. **计算**：创建一个新节点 `newHead`，并让 `newHead.next` 指向 `oldHead`。
-3. **CAS**：原子地尝试将栈顶从 `oldHead` 替换为 `newHead`。
-   - **成功**：入栈完成。
-   - **失败**：说明在第1步和第3步之间，有别的线程修改了栈顶。没关系，重新读取新的栈顶，重复上述过程。
+1. **Read**: Get the current top node `oldHead`.
+2. **Calculate**: Create a new node `newHead` and make `newHead.next` point to `oldHead`.
+3. **CAS**: Atomically attempt to replace the stack top from `oldHead` to `newHead`.
+   - **Success**: Push operation completed.
+   - **Failure**: It means another thread modified the stack top between step 1 and step 3. No problem, re-read the new stack top and repeat the above process.
 
 ![Gemini_Generated_Image_hf22vihf22vihf22](/images/posts/understanding-optimistic-locking-cas/Gemini_Generated_Image_hf22vihf22vihf22.png)
 
-这种方式不需要任何锁，所有线程都在全速奔跑，没有任何线程会被操作系统挂起，从而实现了极高的并发性能。
+This approach requires no locks at all. All threads run at full speed, and no thread is suspended by the operating system, achieving extremely high concurrent performance.
 
 
 
-## 三、CAS 隐患：ABA 问题
+## Part III: CAS Pitfall: The ABA Problem
 
-CAS 虽然强大，但它有一个逻辑漏洞：它只比较“值”是否相等，而不比较“值是否被修改过”。那就是 ABA 问题。
+Although CAS is powerful, it has a logical flaw: it only compares whether "values" are equal, not whether "the value has been modified". This is the ABA problem.
 
-1. 什么是 ABA？
+**What is ABA?**
 
-想象以下场景：
+Imagine the following scenario:
 
-1. 线程 T1 准备执行 CAS，它看到变量的值是 **A**。
-2. 线程 T2 动作很快，把变量从 **A** 改成了 **B**，然后又改回了 **A**。
-3. 线程 T1 执行 CAS，它发现变量的值还是 **A**，于是判定“数据未变”，CAS 操作成功。
+1. Thread T1 is about to execute CAS, and it sees the variable's value is **A**.
+2. Thread T2 acts quickly, changing the variable from **A** to **B**, then back to **A**.
+3. Thread T1 executes CAS, finds the variable's value is still **A**, and therefore determines "data unchanged", and the CAS operation succeeds.
 
-在某些场景下（尤其是涉及指针重用或链表节点管理时），这会导致严重的数据结构损坏。虽然看起来值没变，但“此 A 非彼 A”，中间经历的状态变化丢失了。
+In certain scenarios (especially involving pointer reuse or linked list node management), this can lead to serious data structure corruption. Although the value appears unchanged, "this A is not that A"—the intermediate state changes are lost.
 
 ![Gemini_Generated_Image_y6hdu9y6hdu9y6hd](/images/posts/understanding-optimistic-locking-cas/Gemini_Generated_Image_y6hdu9y6hdu9y6hd.png)
 
-那么如何解决 ABA 问题 ？
+**How to Solve the ABA Problem?**
 
-解决 ABA 问题的核心思路是加版本号（Versioning） 。如果我们不仅更新引用，还同时更新一个版本号，问题就迎刃而解：
+The core idea to solve the ABA problem is to add versioning. If we not only update the reference but also update a version number simultaneously, the problem is solved:
 
-- 不加版本：`A -> B -> A`，CAS 无法识别。
-- 加版本：`1A -> 2B -> 3A`。CAS 检查时会发现，虽然值还是 A，但版本号从 1 变成了 3，因此操作失败。
+- Without versioning: `A -> B -> A`, CAS cannot detect it.
+- With versioning: `1A -> 2B -> 3A`. During CAS checking, it will find that although the value is still A, the version number changed from 1 to 3, so the operation fails.
 
-Java 提供了 `AtomicStampedReference` 类来实现带有版本号的原子引用更新，从而彻底解决 ABA 问题。
+Java provides the `AtomicStampedReference` class to implement atomic reference updates with version numbers, completely solving the ABA problem.
 
-## 四、虚拟线程时代的 CAS
+## Part IV: CAS in the Era of Virtual Threads
 
-回顾全文，我们可以得出结论：**CAS 是实现高性能并发的基石**。它避开了重量级的锁机制，利用 CPU 底层指令实现了高效的线程安全。Java 中所有的原子类（AtomicInteger, AtomicReference）以及高性能队列（ConcurrentLinkedQueue）底层都依赖于它。在未来 Java 25 + 虚拟线程（Virtual Threads） 的新时代，CAS 的地位依然稳固吗？
+Reviewing the entire article, we can conclude: **CAS is the cornerstone of high-performance concurrency**. It avoids heavyweight locking mechanisms and achieves efficient thread safety using CPU-level instructions. All atomic classes in Java (AtomicInteger, AtomicReference) and high-performance queues (ConcurrentLinkedQueue) depend on it at the bottom layer. In the new era of Java 25 + Virtual Threads, is CAS's position still solid?
 
-答案是：**CAS 依然是底层核心，但在业务层的统治力有所下降。**
+The answer is: **CAS remains the core at the bottom layer, but its dominance at the business layer has somewhat declined.**
 
-随着 Project Loom（虚拟线程）的引入，线程阻塞的成本变得极其低廉（只挂起虚拟线程，不挂起内核线程）。在超高竞争的场景下，简单的锁可能比处于激烈自旋状态的 CAS 更节省 CPU 资源。但无论如何，CAS 依然是 JVM 内部实现、高层并发抽象（如 Virtual Threads 调度本身）的最底层原语。理解 CAS，就是理解并发编程的物理定律。
+With the introduction of Project Loom (Virtual Threads), the cost of thread blocking has become extremely low (only suspending virtual threads, not kernel threads). In scenarios with extremely high contention, simple locks may save more CPU resources than CAS in intense spinning states. However, regardless, CAS remains the most fundamental primitive for JVM internal implementation and high-level concurrency abstractions (such as Virtual Threads scheduling itself). Understanding CAS is understanding the physical laws of concurrent programming.
