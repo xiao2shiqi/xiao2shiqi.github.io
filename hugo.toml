@@ -59,7 +59,7 @@ defaultContentLanguage = "zh"
     
     [languages.zh.params.homeInfoParams]
         Title = "欢迎来到我的博客"
-        Content = "你好，我是肖斌。这里记录我的技术笔记与思考。了解更多关于我以及我的项目 [Visual NCE](https://xiao2shiqi.github.io/visual-nce/)，请访问 [关于我](/about) 页面。<br><br>📱 联系方式：微信 18198971094"
+        Content = "<img src='/images/avatar.jpg' alt='肖斌' style='width: 160px; height: 160px; border-radius: 50%; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);'> <br> 你好，我是肖斌。这里记录我的技术笔记与思考。了解更多关于我以及我的项目 [Visual NCE](https://xiao2shiqi.github.io/visual-nce/)，请访问 [关于我](/about) 页面。<br><br>📱 联系方式：微信 18198971094"
 
     [[languages.zh.menu.main]]
         name = "文章"
@@ -87,7 +87,7 @@ defaultContentLanguage = "zh"
 
     [languages.en.params.homeInfoParams]
         Title = "Welcome to My Blog"
-        Content = "Hi, I am Xiao Bin. Here I record my technical notes and thoughts. Check out my [About](/en/about) page to learn more about me and my projects like [Visual NCE](https://xiao2shiqi.github.io/visual-nce/).<br><br>📱 Contact Information: WeChat: 18198971094"
+        Content = "<img src='/images/avatar.jpg' alt='Xiao Bin' style='width: 160px; height: 160px; border-radius: 50%; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);'> <br> Hi, I am Xiao Bin. Here I record my technical notes and thoughts. Check out my [About](/en/about) page to learn more about me and my projects like [Visual NCE](https://xiao2shiqi.github.io/visual-nce/).<br><br>📱 Contact Information: WeChat: 18198971094"
 
     [[languages.en.menu.main]]
         name = "Posts"

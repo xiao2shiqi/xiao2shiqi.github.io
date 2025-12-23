@@ -6,6 +6,8 @@ title = 'About Me'
 
 ## 👋 Hi, I am Xiao Bin
 
+![Xiao Bin](/images/avatar.jpg)
+
 I am a software engineer passionate about technology. In this blog, I mainly record my technical notes, work experiences, and thoughts on software architecture.
 
 My current focus areas include:
