@@ -4,11 +4,7 @@ draft = false
 title = 'About Me'
 +++
 
-## 👋 Hi, I am Xiao Bin
-
-![Xiao Bin](/images/avatar.jpg)
-
-I am a software engineer passionate about technology. In this blog, I mainly record my technical notes, work experiences, and thoughts on software architecture.
+<div class='about-header'> <img src='/images/avatar.jpg' alt='Xiao Bin'> <div> <h2>👋 Hi, I am Xiao Bin</h2> <p>I am a software engineer passionate about technology. In this blog, I mainly record my technical notes, work experiences, and thoughts on software architecture.</p> </div> </div> <style> .about-header { display: flex; align-items: center; gap: 40px; margin-bottom: 30px; } .about-header img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink: 0; } .about-header h2 { margin-top: 0; } @media (max-width: 600px) { .about-header { flex-direction: column; text-align: center; } } </style>
 
 My current focus areas include:
 - **Back-end Development**: Java Ecosystem, Spring Boot/Cloud

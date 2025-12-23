@@ -4,11 +4,7 @@ draft = false
 title = '关于我'
 +++
 
-## 👋 你好，我是 肖斌 (Xiao Bin)
-
-![Xiao Bin](/images/avatar.jpg)
-
-我是一名热爱技术的软件工程师。在这个博客里，我主要记录我的技术笔记、工作心得以及对软件架构的思考。
+<div class='about-header'> <img src='/images/avatar.jpg' alt='肖斌'> <div> <h2>👋 你好，我是 肖斌 (Xiao Bin)</h2> <p>我是一名热爱技术的软件工程师。在这个博客里，我主要记录我的技术笔记、工作心得以及对软件架构的思考。</p> </div> </div> <style> .about-header { display: flex; align-items: center; gap: 40px; margin-bottom: 30px; } .about-header img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex-shrink: 0; } .about-header h2 { margin-top: 0; } @media (max-width: 600px) { .about-header { flex-direction: column; text-align: center; } } </style>
 
 目前的关注领域包括：
 - **后端开发**：Java 生态系统、Spring Boot/Cloud
