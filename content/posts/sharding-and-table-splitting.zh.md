@@ -1,161 +1,116 @@
 +++
-title = 'Consistency in Sharded Databases and Tables'
+title = '分库分表环境下的数据一致性挑战与解决方案'
 date = '2025-12-06T00:00:00+08:00'
 draft = false
-tags = ["Architecture"]
+tags = ["架构"]
+description = '介绍如何在分库分表环境下优雅地处理 DDL 变更和元数据同步。'
 +++
 
-### Preface: The "Day Two" Challenge After Database and Table Sharding
+### 前言：分库分表后的“第二天”挑战
 
-In the architectural evolution of large-scale microservices, database and table sharding is often regarded as the "silver bullet" for solving massive data storage and high-concurrency write challenges. When we excitedly use Apache ShardingSphere to split a monolithic database into 16 sharded databases and 1,024 sharded tables, watching system throughput soar, we often overlook a serious problem that follows closely—**operations and consistency**. On the "day two" after sharding goes live, development and operations teams typically face the following soul-searching questions:
+在大规模微服务架构的演进过程中，分库分表（Sharding）常被视为解决海量数据存储与高并发写入挑战的“银弹”。当我们兴奋地使用 Apache ShardingSphere 将单体数据库拆分为 16 个分库、1024 个分表，看着系统吞吐量直线飙升时，往往会忽略随之而来的一个严峻问题——**运维与一致性**。在分库分表上线的“第二天”，开发与运维团队通常会面临以下灵魂拷问：
 
-1. **DDL Nightmare**: When business requirements change and a field needs to be added to a logical table, must the DBA manually connect to 16 databases and execute `ALTER TABLE` 1,024 times?
-2. **Microservice "Split Personality"**: In a microservices multi-instance deployment scenario, if instance A modifies the table structure, how does instance B know? If instance B doesn't know and is still using old metadata to assemble SQL, won't it throw errors?
-3. **Architecture Selection Confusion**: I've heard that ShardingSphere has both JDBC and Proxy modes. Do we also need to introduce Zookeeper? Won't this make the architecture too complex?
+1. **DDL 噩梦**：当业务需求变更，逻辑表需要增加一个字段时，DBA 是否必须手动连接 16 个数据库，执行 1024 次 `ALTER TABLE`？
+2. **微服务“人格分裂”**：在微服务多实例部署场景下，如果实例 A 修改了表结构，实例 B 如何感知？如果实例 B 不知道，依然在用旧的元数据组装 SQL，岂不是会报错？
+3. **架构选型困惑**：听说 ShardingSphere 有 JDBC 和 Proxy 两种模式，我们是否还需要引入 Zookeeper？这会不会让架构变得太复杂？
 
-Based on practical experience, this article will systematically dissect the problem, from DDL change consistency to microservice metadata synchronization, providing a complete solution.
-
-------
-
-### Part I: How to Elegantly Manage Hundreds or Thousands of Tables?
-
-In the era of monolithic databases, executing an `ALTER TABLE` was a simple task. However, in a sharding architecture, a logical table (Logic Table) may correspond to dozens or even hundreds of physical tables (Actual Tables) scattered across different physical nodes. If manual maintenance is adopted, not only is efficiency extremely low, but it's also very easy to have "missed cases"—where some sharded tables succeed while others fail, leading to Schema inconsistencies between data nodes and causing catastrophic errors at the application layer.
-
-**Solution: ShardingSphere-JDBC + Flyway / Liquibase**
-
-In the Java ecosystem, it's recommended to combine ShardingSphere-JDBC with database version management tools such as Flyway or Liquibase.
-
-The core process is as follows:
-
-1. **Write Once**: Developers only need to write a standard SQL change script (e.g., `V1.0.1__add_column_to_user.sql`) as if working with a single database.
-2. **Version Management**: Place the script in the project's `resources/db/migration` directory and include it in Git version control.
-3. **Automatic Execution**: When the application starts, Flyway automatically handles database migration.
-4. **Transparent Broadcasting**: This is the most critical step. Flyway doesn't connect to the real physical data source, but rather to the logical data source provided by ShardingSphere-JDBC. ShardingSphere-JDBC internally intercepts this DDL statement, recognizes it as a change to a logical table, and then uses its core capabilities to **automatically broadcast this DDL to all related underlying physical sharded databases and tables**.
-
-Example diagram:
-
-![unnamed](/posts/03/assets/unnamed-5008449.jpg)
-
-Why is this approach a best practice?
-
-- **Development Transparency**: Developers don't need to care about how many databases or tables are sharded at the bottom layer. The mental model is no different from single-database development.
-- **Atomicity Guarantee**: ShardingSphere will execute these DDLs in parallel and attempt to ensure consistency of execution results.
-- **Automation**: Combined with CI/CD processes, fully automated database releases can be achieved, completely eliminating manual DBA operations.
+基于实战经验，本文将从 DDL 变更一致性到微服务元数据同步，系统性地剖析这一问题并给出完整解决方案。
 
 ------
 
-### Part II: Why Isn't Standalone Mode Enough?
+### 第一部分：如何优雅地管理成百上千张表？
 
-After solving the DDL execution problem, we successfully updated the structure of all physical tables through Flyway. However, in a microservices architecture, a new, more hidden "pitfall" emerges.
+在单体数据库时代，执行一条 `ALTER TABLE` 是轻松愉快的事情。但在分库分表架构下，一个逻辑表（Logic Table）可能对应分布在不同物理节点上的几十甚至上百个物理表（Actual Tables）。如果采用人工维护，不仅效率极低，而且极易出现“漏网之鱼”——即部分分表成功，部分失败，导致数据节点间的 Schema 不一致，引发应用层的灾难性错误。
 
-**What is Standalone Mode?**
+**解决方案：ShardingSphere-JDBC + Flyway / Liquibase**
 
-ShardingSphere-JDBC runs in **Standalone (single-machine) mode** by default. The characteristics of this mode are:
+在 Java 生态中，推荐将 ShardingSphere-JDBC 与 Flyway 或 Liquibase 等数据库版本管理工具结合使用。
 
-- **Configuration Isolation**: Each microservice instance reads its local YAML configuration file at startup.
-- **Static Loading**: At startup, the instance connects to the database, loads the table structure (metadata), and caches it in its own JVM memory.
-- **No Communication**: Instance A and Instance B have no connection with each other. They each maintain their own set of "sharding rules" and "metadata".
+核心流程如下：
 
-**Scenario Reproduction: "Data Blind Zone" in Microservices Environment**
+1. **一次编写**：开发人员只需像操作单库一样，编写一份标准的 SQL 变更脚本（如 `V1.0.1__add_column_to_user.sql`）。
+2. **版本管理**：将脚本放入项目的 `resources/db/migration` 目录下，并纳入 Git 版本控制。
+3. **自动执行**：应用启动时，Flyway 自动处理数据库迁移。
+4. **透明广播**：这是最关键的一步。Flyway 连接的不是真实的物理数据源，而是 ShardingSphere-JDBC 提供的逻辑数据源。ShardingSphere-JDBC 内部会拦截这条 DDL 语句，识别出它是对逻辑表的操作，然后利用其核心能力，**自动将该 DDL 广播到所有相关的底层物理分库分表中执行**。
 
-Suppose we have a microservice `User-Service` deployed with three instances for high availability: Node A, Node B, and Node C.
+为什么这种方式是最佳实践？
 
-1. **Change Occurs**: Traffic is routed to Node A, triggering Flyway to execute DDL (e.g., adding field `age`).
-2. **Local Refresh**: After ShardingSphere-JDBC on Node A executes the DDL, it intelligently refreshes the metadata **in its own memory**. At this point, Node A knows the table structure has changed.
-3. **Silent Crisis**: Node B and Node C did not execute the DDL (because Flyway ensures it only executes once), and they are completely unaware. In their memory, the table structure is still old.
-4. **Failure Eruption**: When a new request carrying data with the `age` field is routed to Node B, Node B generates SQL based on old metadata, or cannot map the new field when processing the result set, directly throwing an exception.
-
-Example diagram:
-
-![Gemini_Generated_Image_6zwjm6zwjm6zwjm6](/posts/03/assets/Gemini_Generated_Image_6zwjm6zwjm6zwjm6.png)
-
-This is the **limitation of Standalone mode**: it cannot share runtime metadata state across services and instances. It's only suitable for scenarios where configuration never changes, or for monolithic applications.
+- **开发透明化**：开发不需要关心底层到底有多少个库多少张表，心智负担与单库开发无异。
+- **原子性保证**：ShardingSphere 会并行执行这些 DDL，并尽量保证执行结果的一致性。
+- **自动化**：结合 CI/CD 流程，可以实现完全自动化的数据库发布，彻底告别 DBA 手工操作。
 
 ------
 
-### Part III: Cluster Mode (Zookeeper / Etcd) for Metadata Coordination
+### 第二部分：为什么单机模式（Standalone）不够用？
 
-To solve the "split-brain" problem in the microservices environment described above, we need to introduce a coordinator—this gives birth to ShardingSphere's **Cluster mode**.
+解决了 DDL 执行问题后，我们成功通过 Flyway 更新了所有物理表的结构。但在微服务架构下，一个新的、更隐蔽的“坑”出现了。
 
-**3.1 What is Cluster Mode?**
+**什么是单机模式？**
 
-Cluster mode introduces a third-party distributed coordination center (Registry Center), currently supporting **Zookeeper** and **Etcd** as mainstream options. In Cluster mode, ShardingSphere-JDBC instances are no longer isolated islands but form a coordinated cluster. It solves two core problems:
+ShardingSphere-JDBC 默认运行在 **Standalone（单机）模式**下。该模式的特点是：
 
-1. Metadata Consistency
-2. Multi-Instance Coordination
+- **配置隔离**：每个微服务实例在启动时读取本地的 YAML 配置文件。
+- **静态加载**：实例在启动时连接数据库，加载表结构（元数据）并缓存在自己的 JVM 内存中。
+- **互不通信**：实例 A 和实例 B 之间没有任何联系，各自维护各自的一套“分片规则”和“元数据”。
 
-**Concept to Clarify: DDL Broadcasting ≠ Cluster Mode**
+**场景重现：微服务环境下的“信息盲区”**
 
-Many people easily confuse these two concepts:
+假设我们有一个微服务 `User-Service`，为了高可用部署了三个实例：Node A, Node B, Node C。
 
-- **DDL Broadcasting**: Refers to how SQL statements are distributed to physical databases. This can work in Standalone mode as well.
-- **Cluster Mode**: Refers to how **sharding rules and metadata state** are synchronized between different application instances.
+1. **变更发生**：流量打到 Node A，触发 Flyway 执行 DDL（如增加字段 `age`）。
+2. **本地刷新**：Node A 上的 ShardingSphere-JDBC 执行完 DDL 后，会智能地刷新**自己内存中**的元数据。此时，Node A 知道表结构变了。
+3. **静默危机**：Node B 和 Node C 并没有执行 DDL（因为 Flyway 保证只执行一次），它们对此完全不知情。在它们的内存里，表结构还是旧的。
+4. **故障爆发**：当一个新的请求携带 `age` 字段的数据打到 Node B 时，Node B 会根据旧的元数据生成 SQL，或者在处理结果集时无法映射新字段，直接抛出异常。
 
-**How Cluster Mode Works**: Let's return to the previous microservices scenario and see what changes occur after introducing Zookeeper:
-
-1. **State Registration**: All service instances (Node A, B, C) register with Zookeeper at startup and subscribe to metadata change events.
-2. **Change Trigger**: Node A executes DDL.
-3. **Synchronization Center**: After Node A completes execution, it not only refreshes the local cache but also **writes the latest metadata structure to Zookeeper**.
-4. **Event Notification**: Zookeeper detects node data changes and immediately pushes "metadata change events" to Node B and Node C, which have subscribed to that node.
-5. **Automatic Refresh**: After receiving notifications, Node B and Node C automatically reload metadata and update local memory.
-6. **Global Consistency**: The entire system achieves state consistency within milliseconds. No matter which node traffic hits, it can correctly handle the latest table structure.
-
-Example diagram:
-
-![unnamed-2](/posts/03/assets/unnamed-2.jpg)
-
-
-
-**Why Must Microservices Architecture Use Cluster Mode?**
-
-In summary, as long as your system meets the following characteristics, Cluster mode is a must:
-
-1. **Multi-Instance Operation**: The same service is deployed with multiple replicas.
-2. **Dynamic Requirements**: DDL changes may occur at runtime, or read-write separation nodes may be dynamically enabled/disabled.
-3. **Strong Consistency Requirements**: Cannot tolerate SQL errors caused by metadata delays.
-
-By using Zookeeper/Etcd as the configuration center and metadata center, we achieve:
-
-- **Distributed Transaction Coordination**
-- **Distributed Metadata Sharing**
-- **Dynamic Data Source Updates (e.g., circuit-breaking a slave database)**
-- **State and Monitoring Sharing**
+这就是 **Standalone 模式的局限性**：它无法跨服务、跨实例共享运行时的元数据状态。它仅适用于配置永不变更的场景，或单体应用。
 
 ------
 
-### Part IV: Do We Need to Introduce ShardingSphere-Proxy?
+### 第三部分：集群模式（Cluster）与元数据协同
 
-After solving DDL and metadata synchronization, many architects will have a new question: "Do I need to introduce ShardingSphere-Proxy, this independently deployed middleware?"
+为了解决上述微服务环境下的“精神分裂”问题，我们需要引入一个协调者——这便是 ShardingSphere 的 **Cluster（集群）模式**。
 
-First, we need to understand the positioning and advantages of Proxy. ShardingSphere-Proxy is positioned as a transparent database proxy. It looks like a database and works like a database.
+**3.1 什么是集群模式？**
 
-Its main advantages are:
+集群模式引入了第三方分布式协调中心（Registry Center），目前主流支持 **Zookeeper** 和 **Etcd**。在集群模式下，ShardingSphere-JDBC 实例不再是孤岛，而是形成了一个有组织的集群。它解决了两个核心问题：
 
-1. **Multi-Language Support**: If your backend technology stack is mixed, with Java, Python, Go, Node.js, PHP, etc. Non-Java languages cannot use JDBC Driver, so Proxy is the only choice. It exposes services through MySQL/PostgreSQL protocols, allowing clients in any language to connect directly.
-2. **Connection Management**: Proxy can serve as a connection pool, reducing connection pressure on underlying physical databases.
-3. **Unified Entry Point**: For DBAs and operations personnel, connecting to Proxy for queries and management is more convenient than directly connecting to physical databases or configuring complex JDBC.
+1. 元数据一致性
+2. 多实例协同
 
+**需要澄清的概念：DDL 广播 ≠ 集群模式**
 
+很多人容易混淆这两个概念：
 
-**So, Why Isn't Proxy Needed in Pure Java Ecosystems?**
+- **DDL 广播**：指的是 SQL 语句如何分发到物理库执行。这在 Standalone 模式下也可以工作。
+- **集群模式**：指的是**分片规则、元数据状态**如何在不同的应用实例之间同步。
 
-Although Proxy is powerful, it also introduces additional architectural complexity and deployment/operations costs. If your team matches the following profile, you don't need to introduce Proxy at all:
+**集群模式的工作原理**：让我们回到之前的微服务场景，看看引入 Zookeeper 后会发生什么变化：
 
-1. **Full-Stack Java**: Backend services are primarily based on Java (Spring Boot / Spring Cloud).
-2. **Mature Microservices Orchestration**: Already has a complete microservices governance system.
-3. **No Multi-Language Requirements**: Don't need Python scripts or PHP web pages to directly connect to databases and operate on sharded data.
-4. **DBA Needs Met Through Other Means**: DBAs can perform operations through specialized tools or temporary Proxy instances, without production traffic going through Proxy.
+1. **状态注册**：所有服务实例 (Node A, B, C) 启动时都会向 Zookeeper 注册，并订阅元数据变更事件。
+2. **变更触发**：Node A 执行 DDL。
+3. **同步中心**：Node A 执行完毕后，不仅刷新本地缓存，还会将**最新的元数据结构写入 Zookeeper**。
+4. **事件通知**：Zookeeper 监听到节点数据变化，立即向订阅了该节点的 Node B 和 Node C 推送“元数据变更事件”。
+5. **自动刷新**：Node B 和 Node C 接收到通知后，自动重新加载元数据，更新本地内存。
+6. **全局一致**：整个系统在毫秒级达成了状态一致。无论流量打到哪个节点，都能正确处理最新的表结构。
 
-In a pure Java microservices architecture, **ShardingSphere-JDBC + Cluster Mode (ZK/Etcd) + Flyway** is the lightest-weight, highest-performance, lowest-maintenance-cost golden combination. JDBC mode itself has all the core capabilities of database/table sharding, DDL broadcasting, read-write separation routing, merging, and distributed transactions, with extremely low performance overhead (nearly native JDBC).
+**为什么微服务架构必须使用集群模式？**
+
+总结来说，只要你的系统符合以下特征，集群模式是必选项：
+
+1. **多实例运行**：同一个服务部署了多个副本。
+2. **动态需求**：运行时可能发生 DDL 变更，或者动态开启/关闭读写分离节点。
+3. **强一致性要求**：无法忍受因元数据滞后导致的 SQL 报错。
+
+通过使用 Zookeeper/Etcd 作为配置中心和元数据中心，我们实现了：**分布式元数据共享**和**动态数据源更新**。
 
 ------
 
-### Part V: Summary
+### 第四部分：总结
 
-The problem of maintaining data consistency after database and table sharding in microservices is essentially a distributed system state synchronization problem. The following solutions are provided:
+微服务下分库分表后的数据一致性维护，本质上是一个分布式系统的状态同步问题。总结如下方案：
 
-1. **Solving "Database/Table Structure" Consistency**: Don't hesitate to use Flyway or Liquibase. Script and version DDL, leverage ShardingSphere-JDBC's broadcasting capability to achieve "write once, execute everywhere".
-2. **Solving "Inter-Instance" Consistency**: In microservices multi-instance scenarios, Cluster mode must be enabled. Introduce Zookeeper or Etcd to establish a metadata center, ensuring that when one instance modifies the database structure or state, all other "sibling instances" can receive notifications in real-time and synchronize updates.
-3. **Architectural Simplification**: If business scenarios are primarily based on JVM languages, don't blindly introduce ShardingSphere-Proxy. Stick with JDBC mode, which provides better performance and a simpler topology.
+1. **解决“库表结构”一致性**：果断使用 Flyway 或 Liquibase。将 DDL 脚本化、版本化，利用 ShardingSphere-JDBC 的广播能力实现“一次编写，到处执行”。
+2. **解决“实例间”一致性**：在微服务多实例场景下，必须开启 Cluster 模式。引入 Zookeeper 或 Etcd 建立元数据中心，确保一个实例修改了库结构或状态后，所有其他“兄弟实例”都能实时收到通知并同步更新。
+3. **架构简化**：如果业务场景主要基于 JVM 语言，不要盲目引入 ShardingSphere-Proxy。坚持使用 JDBC 模式，它能提供更好的性能和更简单的拓扑结构。
 
-Through this combination—**JDBC + Flyway + Cluster Mode**—we can build a modern database architecture that has both elastic scaling capabilities and a monolithic application-like development experience. This not only solves the operational pain points after sharding but also lays a solid foundation for the system's long-term evolution.
+通过 **JDBC + Flyway + Cluster Mode** 这一套组合拳，我们可以构建出一个既具备弹性扩展能力，又拥有单体应用般开发体验的现代数据库架构。

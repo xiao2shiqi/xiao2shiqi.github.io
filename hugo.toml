@@ -19,7 +19,8 @@ defaultContentLanguage = "zh"
     ShowPostNavLinks = true
     ShowBreadCrumbs = true
     ShowCodeCopyButtons = true
-    
+    ShowLanguageSwitcher = true  # 显示语言切换器
+
     # 搜索配置
     [params.fuseOpts]
         isCaseSensitive = false
@@ -52,6 +53,7 @@ defaultContentLanguage = "zh"
 [languages.zh]
     languageName = "中文"
     languageCode = "zh-cn"
+    contentDir = "content" # 保持默认，使用后缀区分
     weight = 1
     title = "肖斌的博客"
     
@@ -79,6 +81,7 @@ defaultContentLanguage = "zh"
 [languages.en]
     languageName = "English"
     languageCode = "en"
+    contentDir = "content"
     weight = 2
     title = "Xiao Bin's Blog"
 
