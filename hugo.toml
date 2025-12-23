@@ -1,7 +1,6 @@
 baseURL = "https://xiao2shiqi.github.io/"
-languageCode = "zh-cn"
-title = "Xiao Bin's blog"
 theme = "PaperMod"
+defaultContentLanguage = "zh"
 
 # 启用搜索功能
 [outputs]
@@ -12,20 +11,8 @@ theme = "PaperMod"
     pagerSize = 10  # 每页显示的文章数量
 
 [params]
-    ShowPageNums = true  # 显示页码 (当前页/总页数)
-    # 禁用 profileMode，改用普通主页模式
+    ShowPageNums = true
     defaultTheme = "auto"
-    
-    # 启用搜索功能
-    [params.fuseOpts]
-        isCaseSensitive = false
-        shouldSort = true
-        location = 0
-        distance = 1000
-        threshold = 0.2  # 降低阈值，提高精确度（0-1，越小越精确）
-        minMatchCharLength = 2  # 最小匹配字符长度
-        limit = 10  # 限制最多显示10个结果
-        keys = ["title", "permalink", "summary"]  # 移除 content 避免重复匹配
     ShowShareButtons = true
     ShowReadingTime = true
     displayFullLangName = true
@@ -33,46 +20,85 @@ theme = "PaperMod"
     ShowBreadCrumbs = true
     ShowCodeCopyButtons = true
     
-    # 主页顶部介绍文字
-    [params.homeInfoParams]
-    Title = "Welcome to My Blog"
-    Content = "Hi, I am Xiao Bin. Here I record my technical notes and thoughts. Check out my [About](/about) page to learn more about me and my projects like [Visual NCE](https://xiao2shiqi.github.io/visual-nce/).<br><br>📱 Contact Information: WeChat: 18198971094"
-    # 社交图标，会显示在顶部介绍下方
+    # 搜索配置
+    [params.fuseOpts]
+        isCaseSensitive = false
+        shouldSort = true
+        location = 0
+        distance = 1000
+        threshold = 0.2
+        minMatchCharLength = 2
+        limit = 10
+        keys = ["title", "permalink", "summary"]
+
+    # 社交图标 (全局通用)
     [[params.socialIcons]]
-    name = "x"  # PaperMod 主题支持 X (原 Twitter) 图标
-    url = "http://x.com/xiao2shiqi"
+        name = "x"
+        url = "http://x.com/xiao2shiqi"
 
     [[params.socialIcons]]
-    name = "github"
-    url = "https://github.com/xiao2shiqi"
+        name = "github"
+        url = "https://github.com/xiao2shiqi"
 
     [[params.socialIcons]]
-    name = "email"
-    url = "mailto:xiaobin.phoenix@gmail.com"
+        name = "email"
+        url = "mailto:xiaobin.phoenix@gmail.com"
 
     [[params.socialIcons]]
-    name = "wechat"
-    title = "WeChat: 18198971094"
-    url = "#"
+        name = "wechat"
+        title = "WeChat: 18198971094"
+        url = "#"
 
-    # [[params.socialIcons]]
-    # name = "rss"
-    # url = "index.xml"
+[languages.zh]
+    languageName = "中文"
+    languageCode = "zh-cn"
+    weight = 1
+    title = "肖斌的博客"
+    
+    [languages.zh.params.homeInfoParams]
+        Title = "欢迎来到我的博客"
+        Content = "你好，我是肖斌。这里记录我的技术笔记与思考。了解更多关于我以及我的项目 [Visual NCE](https://xiao2shiqi.github.io/visual-nce/)，请访问 [关于我](/about) 页面。<br><br>📱 联系方式：微信 18198971094"
 
-[menu]
-    [[menu.main]]
+    [[languages.zh.menu.main]]
+        name = "文章"
+        url = "/posts"
+        weight = 1
+    [[languages.zh.menu.main]]
+        name = "标签"
+        url = "/tags"
+        weight = 2
+    [[languages.zh.menu.main]]
+        name = "搜索"
+        url = "/search"
+        weight = 3
+    [[languages.zh.menu.main]]
+        name = "关于"
+        url = "/about"
+        weight = 4
+
+[languages.en]
+    languageName = "English"
+    languageCode = "en"
+    weight = 2
+    title = "Xiao Bin's Blog"
+
+    [languages.en.params.homeInfoParams]
+        Title = "Welcome to My Blog"
+        Content = "Hi, I am Xiao Bin. Here I record my technical notes and thoughts. Check out my [About](/en/about) page to learn more about me and my projects like [Visual NCE](https://xiao2shiqi.github.io/visual-nce/).<br><br>📱 Contact Information: WeChat: 18198971094"
+
+    [[languages.en.menu.main]]
         name = "Posts"
         url = "/posts"
         weight = 1
-    [[menu.main]]
+    [[languages.en.menu.main]]
         name = "Tags"
         url = "/tags"
         weight = 2
-    [[menu.main]]
+    [[languages.en.menu.main]]
         name = "Search"
         url = "/search"
         weight = 3
-    [[menu.main]]
+    [[languages.en.menu.main]]
         name = "About"
         url = "/about"
         weight = 4
