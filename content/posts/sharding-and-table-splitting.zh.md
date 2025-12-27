@@ -33,6 +33,11 @@ description = '介绍如何在分库分表环境下优雅地处理 DDL 变更和
 3. **自动执行**：应用启动时，Flyway 自动处理数据库迁移。
 4. **透明广播**：这是最关键的一步。Flyway 连接的不是真实的物理数据源，而是 ShardingSphere-JDBC 提供的逻辑数据源。ShardingSphere-JDBC 内部会拦截这条 DDL 语句，识别出它是对逻辑表的操作，然后利用其核心能力，**自动将该 DDL 广播到所有相关的底层物理分库分表中执行**。
 
+示例流程图：
+
+![unnamed](/posts/03/assets/unnamed-5008449.jpg)
+
+
 为什么这种方式是最佳实践？
 
 - **开发透明化**：开发不需要关心底层到底有多少个库多少张表，心智负担与单库开发无异。
@@ -61,6 +66,11 @@ ShardingSphere-JDBC 默认运行在 **Standalone（单机）模式**下。该模
 2. **本地刷新**：Node A 上的 ShardingSphere-JDBC 执行完 DDL 后，会智能地刷新**自己内存中**的元数据。此时，Node A 知道表结构变了。
 3. **静默危机**：Node B 和 Node C 并没有执行 DDL（因为 Flyway 保证只执行一次），它们对此完全不知情。在它们的内存里，表结构还是旧的。
 4. **故障爆发**：当一个新的请求携带 `age` 字段的数据打到 Node B 时，Node B 会根据旧的元数据生成 SQL，或者在处理结果集时无法映射新字段，直接抛出异常。
+
+示例流程图：
+
+![Gemini_Generated_Image_6zwjm6zwjm6zwjm6](/posts/03/assets/Gemini_Generated_Image_6zwjm6zwjm6zwjm6.png)
+
 
 这就是 **Standalone 模式的局限性**：它无法跨服务、跨实例共享运行时的元数据状态。它仅适用于配置永不变更的场景，或单体应用。
 
@@ -92,6 +102,11 @@ ShardingSphere-JDBC 默认运行在 **Standalone（单机）模式**下。该模
 4. **事件通知**：Zookeeper 监听到节点数据变化，立即向订阅了该节点的 Node B 和 Node C 推送“元数据变更事件”。
 5. **自动刷新**：Node B 和 Node C 接收到通知后，自动重新加载元数据，更新本地内存。
 6. **全局一致**：整个系统在毫秒级达成了状态一致。无论流量打到哪个节点，都能正确处理最新的表结构。
+
+示例流程图：
+
+![unnamed-2](/posts/03/assets/unnamed-2.jpg)
+
 
 **为什么微服务架构必须使用集群模式？**
 

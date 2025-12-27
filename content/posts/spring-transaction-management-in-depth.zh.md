@@ -77,6 +77,11 @@ public class DataSourceConfig {
 
 代理对象内部包含了一个 **TransactionInterceptor**（事务拦截器），它会在目标方法执行前开启事务，在方法执行成功后提交事务，如果方法抛出异常则回滚事务。
 
+该过程可以通过下图表示：
+
+![事务代理原理图](/images/posts/spring-transaction-management-in-depth/transaction-aop.png)
+
+
 ## 第四部分：深入探讨 `@Transactional` 的核心属性
 
 `@Transactional` 注解提供了丰富的属性，让我们能精细化地控制事务行为。
@@ -103,7 +108,10 @@ public void someBusinessMethod() throws IOException {
 
 ### 2. 事务传播行为 (`propagation`)
 
-事务传播行为定义了当一个已有事务的方法调用另一个有事务的方法时，事务应该如何表现。
+事务传播行为定义了当一个已有事务的方法调用另一个有事务的方法时，事务应该如何表现。这是 Spring 事务管理中非常强大且重要的一个特性。
+
+![事务传播行为图解](/images/posts/spring-transaction-management-in-depth/transaction-propagation.png)
+
 
 最常用的传播行为包括：
 
@@ -114,6 +122,9 @@ public void someBusinessMethod() throws IOException {
 ### 3. 隔离级别 (`isolation`)
 
 事务隔离级别定义了一个事务可能受其他并发事务影响的程度。不合适的隔离级别会导致脏读、不可重复读和幻读。
+
+![事务隔离级别图解](/images/posts/spring-transaction-management-in-depth/transaction-isolation.png)
+
 
 `@Transactional` 支持以下隔离级别：
 

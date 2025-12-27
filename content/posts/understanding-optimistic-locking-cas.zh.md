@@ -17,6 +17,9 @@ description = '如何在不加锁的情况下保证并发安全？'
 1. **线程挂起与恢复的开销**：当一个线程无法获取锁时，它会被阻塞（挂起）。操作系统在挂起和恢复线程时需要进行上下文切换，这在高位性能场景下是非常昂贵的。
 2. **活跃性问题**：阻塞锁可能导致死锁、优先级倒置和线程饥饿。
 
+![锁的开销示意图](/images/posts/understanding-optimistic-locking-cas/Gemini_Generated_Image_myqg4emyqg4emyqg.png)
+
+
 对于简单的计数器自增操作，为此挂起和恢复线程就像为了喝杯水而关掉整个城市的供水系统一样——成本极度不成比例。对于涉及整数和对象引用变更的场景，我们需要一种更轻量、更“乐观”的方法。
 
 ## 第二部分：硬件级原子武器：CAS
@@ -32,6 +35,9 @@ CAS 操作由三个核心步骤组成：
 1. **读取旧值**：我看一眼内存里当前的值是多少。
 2. **比较**：准备写入时，我再看一眼——内存里的值还是我刚才看到的那个吗？
 3. **交换**：如果是，我就把它更新为新值（New Value）；如果不是，说明在此期间有其他线程修改了它，我的操作失败。
+
+![CAS 工作原理图](/images/posts/understanding-optimistic-locking-cas/Gemini_Generated_Image_d9qq9wd9qq9wd9qq.png)
+
 
 我们可以用一段 Java 代码来模拟 CAS 逻辑（注意：真实的 CAS 是无锁的 CPU 指令，这里使用 `synchronized` 仅为了模拟其原子语义）：
 
@@ -71,6 +77,9 @@ public class SimulatedCAS {
 
 这种方式完全不需要锁。所有线程都全速运行，没有线程会被操作系统挂起，从而实现了极高的并发性能。
 
+![非阻塞算法示意图](/images/posts/understanding-optimistic-locking-cas/Gemini_Generated_Image_hf22vihf22vihf22.png)
+
+
 ## 第三部分：CAS 的陷阱：ABA 问题
 
 虽然 CAS 强大，但它有一个逻辑漏洞：它只比较“值”是否相等，而不比较“值是否被修改过”。这就是 ABA 问题。
@@ -84,6 +93,9 @@ public class SimulatedCAS {
 3. 线程 T1 执行 CAS，发现变量值依然是 **A**，于是认为“数据未变”，操作成功。
 
 在某些场景下（特别是涉及指针复用或链表节点管理时），这可能导致严重的数据结构损坏。虽然值看起来没变，但“此 A 已非彼 A”——中间的状态变更丢失了。
+
+![ABA 问题图解](/images/posts/understanding-optimistic-locking-cas/Gemini_Generated_Image_y6hdu9y6hdu9y6hd.png)
+
 
 **如何解决 ABA 问题？**
 
