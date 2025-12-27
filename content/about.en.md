@@ -44,7 +44,7 @@ My current focus areas include:
 
 ### 🛠️ Personal Projects
 
-#### [Visual NCE - Interactive English Learning](https://xiao2shiqi.github.io/visual-nce/)
+#### [Visual NCE - Interactive English Learning](https://nce.xiao27.com/)
 
 **Visual NCE** is an interactive English learning project I developed. It aims to provide a more efficient and interesting digital learning experience for "New Concept English".
 
@@ -52,7 +52,7 @@ My current focus areas include:
 - **Tech Stack**: Vue 3 + Vite + TailwindCSS (Frontend core).
 - **Main Content**: Structured display and learning cards for all four volumes of "New Concept English".
 
-If you are interested in English learning or the technical implementation of this project, feel free to visit [Visual NCE](https://xiao2shiqi.github.io/visual-nce/) to experience it.
+If you are interested in English learning or the technical implementation of this project, feel free to visit [Visual NCE](https://nce.xiao27.com/) to experience it.
 
 ### 📱 Contact Information
 

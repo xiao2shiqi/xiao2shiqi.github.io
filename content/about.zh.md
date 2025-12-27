@@ -44,7 +44,7 @@ title = '关于我'
 
 ### 🛠️ 个人作品
 
-#### [Visual NCE - 沉浸式新概念英语学习](https://xiao2shiqi.github.io/visual-nce/)
+#### [Visual NCE - 沉浸式新概念英语学习](https://nce.xiao27.com/)
 
 **Visual NCE** 是我开发的一个互动式英语学习项目。它旨在为《新概念英语》（New Concept English）提供更加高效、有趣的数字化学习体验。
 
@@ -52,7 +52,7 @@ title = '关于我'
 - **技术栈**：Vue 3 + Vite + TailwindCSS（前端核心）。
 - **主要内容**：支持全四册《新概念英语》的结构化展示与学习卡片。
 
-如果你也对英语学习或是这个项目的技术实现感兴趣，欢迎访问 [Visual NCE](https://xiao2shiqi.github.io/visual-nce/) 体验。
+如果你也对英语学习或是这个项目的技术实现感兴趣，欢迎访问 [Visual NCE](https://nce.xiao27.com/) 体验。
 
 ### 📱 联系方式
 

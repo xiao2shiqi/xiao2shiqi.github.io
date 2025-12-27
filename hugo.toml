@@ -62,7 +62,7 @@ defaultContentLanguage = "zh"
     
     [languages.zh.params.homeInfoParams]
         Title = "欢迎来到我的博客"
-        Content = "<div class='home-info-github'> <img src='/images/avatar.jpg' alt='肖斌'> <div> <p>你好，我是肖斌。这里记录我的技术笔记与思考。</p> <p>了解更多关于我以及我的项目 <a href='/about'>Visual NCE</a>，请点击这里。</p> <p>📱 <b>微信：18198971094</b></p> </div> </div> <style>.home-info-github { display: flex; align-items: center; gap: 40px; text-align: left; margin: 20px 0; } .home-info-github img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } .home-info-github div { flex: 1; } @media (max-width: 600px) { .home-info-github { flex-direction: column; text-align: center; } }</style>"
+        Content = "<div class='home-info-github'> <img src='/images/avatar.jpg' alt='肖斌'> <div> <p>你好，我是肖斌。这里记录我的技术笔记与思考。</p> <p>了解更多关于我以及我的项目 <a href='https://nce.xiao27.com/'>Visual NCE</a>，请点击这里。</p> <p>📱 <b>微信：18198971094</b></p> </div> </div> <style>.home-info-github { display: flex; align-items: center; gap: 40px; text-align: left; margin: 20px 0; } .home-info-github img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } .home-info-github div { flex: 1; } @media (max-width: 600px) { .home-info-github { flex-direction: column; text-align: center; } }</style>"
 
     [[languages.zh.menu.main]]
         name = "文章"
@@ -90,7 +90,7 @@ defaultContentLanguage = "zh"
 
     [languages.en.params.homeInfoParams]
         Title = "Welcome to My Blog"
-        Content = "<div class='home-info-github'> <img src='/images/avatar.jpg' alt='Xiao Bin'> <div> <p>Hi, I am Xiao Bin. Here I record my technical notes and thoughts.</p> <p>Check out my <a href='/en/about'>About</a> page to learn more about me and my projects like <a href='https://xiao2shiqi.github.io/visual-nce/'>Visual NCE</a>.</p> <p>📱 <b>WeChat: 18198971094</b></p> </div> </div> <style>.home-info-github { display: flex; align-items: center; gap: 40px; text-align: left; margin: 20px 0; } .home-info-github img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } .home-info-github div { flex: 1; } @media (max-width: 600px) { .home-info-github { flex-direction: column; text-align: center; } }</style>"
+        Content = "<div class='home-info-github'> <img src='/images/avatar.jpg' alt='Xiao Bin'> <div> <p>Hi, I am Xiao Bin. Here I record my technical notes and thoughts.</p> <p>Check out my <a href='/en/about'>About</a> page to learn more about me and my projects like <a href='https://nce.xiao27.com/'>Visual NCE</a>.</p> <p>📱 <b>WeChat: 18198971094</b></p> </div> </div> <style>.home-info-github { display: flex; align-items: center; gap: 40px; text-align: left; margin: 20px 0; } .home-info-github img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } .home-info-github div { flex: 1; } @media (max-width: 600px) { .home-info-github { flex-direction: column; text-align: center; } }</style>"
 
     [[languages.en.menu.main]]
         name = "Posts"
