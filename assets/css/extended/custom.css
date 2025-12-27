@@ -1,0 +1,41 @@
+/**
+ * 自定义样式 - 修复 Hugo 代码高亮渲染问题
+ * 
+ * 问题：新版 Hugo/Chroma 生成的 .line 元素使用 flex 布局，
+ *      导致代码块中的 token 垂直堆叠而非水平排列。
+ * 解决：覆盖 PaperMod 主题的 .chroma .line 样式。
+ */
+
+/* 修复代码行的 Flex 布局问题 */
+.chroma .line {
+    display: inline !important;
+}
+
+/* 确保代码行内容正确换行 */
+.chroma .cl {
+    display: inline !important;
+}
+
+/* 修复表格布局中的代码单元格 */
+.chroma .lntd {
+    vertical-align: top;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+/* 确保代码内容在 pre 中正确显示 */
+.chroma .lntd pre {
+    margin: 0;
+    padding: 0;
+}
+
+/* 修复代码块中的空白符处理 */
+.chroma code {
+    white-space: pre;
+}
+
+/* 修复空白符 span 的显示 */
+.chroma .w {
+    display: inline !important;
+}
