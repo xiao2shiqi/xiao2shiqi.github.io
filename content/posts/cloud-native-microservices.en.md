@@ -1,107 +1,106 @@
 +++
 date = '2021-11-30T14:50:42+08:00'
 draft = false
-title = 'Microservice Architecture in the Cloud-Native Era'
+title = 'Microservice Architecture in the Cloud Native Era'
 tags = ["Cloud Native"]
 +++
 
-This sharing mainly focuses on the following four topics:
+This post focuses on the following four themes:
 
 * What is Cloud Native?
-* Why use Cloud-Native architecture?
-* The concept of Microservices
-* Technical selection for Microservices
+* Why use a Cloud Native architecture?
+* The concepts of Microservices
+* Technology selection for Microservices
 
 ### What is Cloud Native?
 
 #### Cloud Computing and Cloud Native
 
-Cloud computing is different from traditional self-built computer rooms. Cloud computing abstracts computing into infrastructure and distributes it through the network. Thanks to the infinite scaling capability of cloud computing, "cloud computing" is just like a water plant; we can get water at any time, unlimited, and pay according to our water consumption. Here are the five basic characteristics of cloud computing.
+Cloud computing differs from traditional self-built data centers. It abstracts computing into infrastructure distributed via the network. Thanks to its infinite scalability, cloud computing is like a water utility—we can access it at any time, in unlimited quantities, and pay only for what we consume. Below are the five basic characteristics of cloud computing:
 
-![Basic characteristics](https://s2.loli.net/2025/02/13/J2Npb3rkiwWxGFz.jpg)
+![Basic Characteristics](https://s2.loli.net/2025/02/13/J2Npb3rkiwWxGFz.jpg)
 
-Here are some current mainstream public cloud vendors:
+Here are the currently mainstream public cloud vendors:
 
-![Mainstream public cloud vendors](https://s2.loli.net/2025/02/13/CamYIjr6suzOiwN.png)
+![Mainstream Public Cloud Vendors](https://s2.loli.net/2025/02/13/CamYIjr6suzOiwN.png)
 
-Cloud native, as the name suggests, **is an application service designed based on cloud computing characteristics**. Thanks to the rapid development of cloud computing, cloud-native applications designed based on cloud computing characteristics have a huge lead over traditional monolithic applications in security, scalability, rapid iteration, operation and maintenance, and other aspects. Cloud native does not refer to a certain technology; it is an architectural design philosophy. Any application that conforms to this architectural design philosophy can be called a **cloud-native application**. Let's look at the CNCF official definition of cloud native:
+Cloud Native, as the name suggests, refers to **application services designed specifically to leverage cloud computing's characteristics**. Benefiting from the rapid development of cloud computing, cloud native applications have a huge lead over traditional monolithic applications in security, scalability, rapid iteration, and operations. Cloud Native is not a specific technology but an architectural design philosophy; any application meeting this philosophy can be called a **Cloud Native application**. Let's look at the official CNCF definition:
 
-![Definition of Cloud Native](https://s2.loli.net/2025/02/13/pdLv87A6aEMYNCl.png)
+![Cloud Native Definition](https://s2.loli.net/2025/02/13/pdLv87A6aEMYNCl.png)
 
 #### Development of Container Cloud Technology
 
-![Development history of virtualization technology](https://s2.loli.net/2025/02/13/y36cj1OX5uJzheg.png)
+![History of Virtualization Technology](https://s2.loli.net/2025/02/13/y36cj1OX5uJzheg.png)
 
-Cloud native relies on containers as the technical foundation to be realized, but containers are not a trendy new technology. Here is the development history of container cloud technology, with several key historical milestones:
+Cloud Native relies on containers as its technical foundation. However, containerization is not a new technology. Here is a brief history with key milestones:
 
-* As early as 2006, Amazon built the IaaS platform AWS based on container technology, becoming the ancestor of all cloud computing vendors. Due to its technical lead, AWS remains the leader in the cloud computing industry today.
-* In 2013, the birth of Docker further lowered the threshold for using container technology. The Docker company, thinking it held the core technology of the cloud era, began to ambitiously challenge traditional cloud computing giants like RedHat and Google. However, it was unexpectedly defeated by Kubernetes, released by RedHat in collaboration with Google. The success of Kubernetes made everyone realize that container technology is not the core technology of the cloud era—**container orchestration** is. (Note: In 2020, K8S officially announced that any container that satisfies the K8S CRI interface can be orchestrated by K8S; Docker was left behind by the era).
-* In 2015, following the success of Kubernetes, Google announced the establishment of the CNCF Foundation, a representative organization of the cloud-native era, dedicated to perfecting cloud-era infrastructure and helping developers build better products.
+* As early as 2006, Amazon built the AWS IaaS platform based on container technology, becoming the pioneer of all cloud vendors. Due to its early lead, AWS remains the leader today.
+* In 2013, the birth of Docker further lowered the barrier for container usage. Docker, believing it held the core technology of the cloud era, ambitiously challenged traditional giants like RedHat and Google. However, it was eventually overtaken by Kubernetes (released by RedHat and Google). Kubernetes' success proved that **container orchestration**, not just the containers themselves, is the core technology. (Note: In 2020, K8S officially announced that any container meeting its CRI interface can be orchestrated, effectively leaving Docker behind).
+* In 2015, following Kubernetes' success, Google announced the formation of the CNCF Foundation—the representative organization of the cloud native era, dedicated to perfecting infrastructure and helping developers build better products.
 
-The diagram below is the CNCF landscape:
+Below is the CNCF Landscape:
 
 ![CNCF Landscape](https://s2.loli.net/2025/02/13/I2eoGCOsxntKkP3.png)
 
-### Why use Cloud-Native architecture?
+### Why use a Cloud Native Architecture?
 
-Mainly discussed from four aspects:
+Let's discuss this through four aspects:
 
 * Automatic Recovery
 * Service Security
-* Elastic Scaling
-* Rapid Release
+* Elastic Expansion
+* Fast Release
 
 #### Automatic Recovery
 
-In my early career, I took over a dilapidated legacy system that had a mysterious bug: it would automatically crash every night for no apparent reason. It could be restored by simple restarting. To ensure the normal use of the business system, I always Got up in the middle of the night to restart the server. At that time, I thought: **If there were a tool that could detect a system crash and automatically restart it, I could sleep soundly**. This is the first problem cloud-native architecture aims to solve: **When an application system goes down, it can automatically recover in the shortest possible time without manual intervention to ensure system robustness**.
+Early in my career, I inherited a poorly maintained legacy system. It had a mysterious bug where it would crash every night for no apparent reason, yet a simple restart would fix it. To ensure business continuity, I often woke up in the middle of the night to restart the server. I thought: **"If only there were a tool that could detect a crash and automatically restart the system, I could get a good night's sleep."** This is the first problem cloud native architecture aims to solve: **robustness through automatic recovery without human intervention**.
 
-Besides unknown bugs, there are also strange exceptions that can cause service crashes, such as:
+Beyond unknown bugs, many anomalies can crash a service:
 
-* Poorly written code leading to OOM.
-* Insufficient resources on the server itself.
-* Deadlocks, disks, network issues, etc.
-* And more...
+* Poorly written code leading to OOM (Out of Memory)
+* Insufficient server resources
+* Deadlocks, disk issues, network failures, etc.
 
-Three strategies for Kubernetes Pod application automatic recovery:
+Kubernetes Pod automatic recovery policies:
 
 ```yaml
 spec: 
-  restartPolicy: Always # When a container terminates and exits, always restart it; this is the default strategy.
+  restartPolicy: Always # Always restart the container when it terminates; default policy
   containers: 
   - image: nginx
     name: web 
 ```
 
-* `Always`: When the container terminates and exits, always restart it; default strategy.
-* `OnFailure`: Restart the container only when it exits abnormally (exit status code non-zero).
-* `Never`: Never restart the container after it terminates and exits.
+* `Always`: Always restart the container when it terminates (the default).
+* `OnFailure`: Restart only if the container exits with a non-zero status code.
+* `Never`: Never restart.
 
 #### Security
 
-In the large-scale distributed systems of microservice architecture, **safe protection and isolation mechanisms between services are established through circuit breaking**.
+In massive distributed microservice systems, **security isolation is established between services via circuit breaking**.
 
-Cloud-native architecture guarantees system security mainly in two aspects:
+Cloud native security manifests in two ways:
 
 * Service Isolation
 * Resource Isolation
 
 **Service Isolation**
 
-Let's look at the secure isolation of service calls, as shown in the figure:
+Look at the isolation in service calls:
 
 ![Security Isolation](https://s2.loli.net/2025/02/13/2NmDYIcbqz5MhSF.png)
 
-Suppose there is a dependency call relationship between Service A and Service B. Its processing logic is as follows:
+If Service A depends on Service B, the logic is:
 
-1. If Service B crashes or goes offline abnormally, the registry will send Service B's status to Service A, which will then trigger the circuit-breaking mechanism.
-2. Service A adopts a degradation strategy or stops sending requests to Service B, avoiding call chain cascades and protecting Service A's availability.
-3. When Service B is brought back up, Service A receives the health check from the registry for Service B and resumes calls or removes the degradation strategy.
+1. If B crashes or goes offline abnormally, the Registry notifies A, which triggers its circuit breaker.
+2. A adopts a fallback strategy or stops sending requests to B, preventing a chain-reaction "cascading failure" and protecting A's availability.
+3. Once B is brought back up, A receives a health check update from the Registry and resumes normal calls.
 
 **Resource Isolation**
 
-Cloud-native architecture's protection mechanism for services is also reflected in resource usage. Previously, multiple systems shared a host's resources, making it prone to the "barrel's short board" effect: as long as one system exhausted the host's resources, all other systems would be affected. Now, based on container-deployed microservices, your system in the production environment is deployed as if confined in small rooms. Pre-arranged resource settings determine the size of the room; the service can only operate within that specified size range. Even if an internal exception causes the service to consume all allocated resources, it won't affect the normal activities of the "little friends" in other rooms, thus ensuring the availability of the entire system.
+Security also applies to resource consumption. Previously, multiple systems sharing one host's resources often suffered from the "bottleneck" effect: one system consuming all resources would crash everything on the host. Now, microservices deployed in containers are "locked in separate rooms." The pre-configured resource settings define the room's size—the service can only operate within its bounds. Even if a bug causes a resource spike, it won't affect neighbors in other rooms, ensuring overall system availability.
 
-Pod configuration file specifying memory requests and limits via Kubernetes:
+Kubernetes Pod configuration for memory requests and limits:
 
 ```yaml
 spec:
@@ -110,136 +109,195 @@ spec:
     image: polinux/stress
     resources:
       limits:
-        memory: "200Mi"		# Memory will be limited within 200 MiB
+        memory: "200Mi"		# Memory limited to 200 MiB
       requests:
-        memory: "100Mi"		# Container will request 100 MiB of memory
+        memory: "100Mi"		# Container requests 100 MiB
 ```
 
-Through service isolation and resource isolation, safety and availability are provided for cloud-native systems. This is just an introductory overview.
+Through service and resource isolation, cloud native systems gain security and availability. This is just an introduction; there is much more to explore.
 
-#### Elastic Scaling
+#### Elastic Expansion
 
-Traditional monolithic applications are often deployed in host servers within computer rooms. Self-purchased servers struggle to cope with rapid business growth, posing several problems:
+Traditional monolithic apps on physical servers struggle with rapid growth:
 
-* Time cost: Purchasing servers requires filling out configuration lists, going through various processes, and waiting for logistics. This can take 1-2 weeks.
-* Space cost: Significant space must be cleared for these large units.
-* Other costs: 24-hour air conditioning, personnel shifts, machine maintenance, idle machines after service decommissioning, etc.
+* **Time Cost**: Purchasing servers requires paperwork, approval, logistics, and setup—easily taking 1-2 weeks.
+* **Space Cost**: Massive physical space is required for hardware.
+* **Other Costs**: 24/7 air conditioning, staff rotations, machine maintenance, and difficulty reselling idle hardware.
 
-Cloud-native systems designed based on the basic characteristics of cloud computing do not have these problems. Mainstream public cloud vendors provide ECS hosts that can basically be scaled and configured as needed, and the resource usage also follows a **pay-as-you-go** model, effectively avoiding limits and waste of computing resources.
+In a cloud native system designed around cloud computing, these issues vanish. Mainstream public clouds offer ECS instances that can expand or shrink on demand, with **pay-as-you-go** pricing to avoid resource waste.
 
-#### Rapid Release
+![ECS Elastic Scaling](https://s2.loli.net/2025/02/13/62wTPgYelButsAo.png)
 
-With the perfection of cloud-native infrastructure like Kubernetes, the deployment methods of modern applications are also very different from the past. Compared to traditional inefficient downtime releases, the Rolling Update provided by cloud-native services helps us achieve the goal of upgrading systems without downtime. For companies that need to respond quickly to market demands, the ability to rapidly iterate business system functions is particularly important for gaining a competitive edge. The Kubernetes RollingUpdate strategy is used to solve the problem of zero-downtime releases:
+#### Fast Release
 
-![Downtime-free release](https://s2.loli.net/2025/02/13/OjlcINCd6TFeXBM.png)
+With modern cloud native infrastructure like Kubernetes, application deployment is vastly different. Compared to traditional, inefficient downtime releases, "Rolling Updates" allow for zero-downtime upgrades. For companies needing to respond quickly to market demands, rapid iteration is a vital competitive edge.
 
-Additionally, we can roll back a deployment to a specific version via `kubectl rollout undo` to solve the problem of rapid microservice rollback. These are the huge advantages of cloud-native architecture over traditional systems.
+![Zero-downtime Release](https://s2.loli.net/2025/02/13/OjlcINCd6TFeXBM.png)
 
-### The concept of Microservices
+Additionally, we can use `kubectl rollout undo` to roll back to a specific version, solving the problem of fast recovery from bad releases. This represents a massive advantage over traditional systems. As programmers, **it is worth investing time to learn the next generation of mainstream architecture**, which will provide significant technical leverage.
 
-#### Theoretical Basis of Microservices
+### Microservice Concepts
 
-Microservices do not refer to a specific technology; it is an abstract concept. As long as all its specifications are met, it can be understood that your system has implemented microservices.
+#### Technical Foundation
 
-![Common concerns of microservices](https://s2.loli.net/2025/02/13/BMqtzHchxX2VnuY.png)
+Microservices is an abstract concept rather than a specific technology. If your system meets all the standards, it can be considered a microservice implementation.
+
+![Microservice Common Concerns](https://s2.loli.net/2025/02/13/BMqtzHchxX2VnuY.png)
 
 #### When to use Microservices?
 
-There have always been two voices in the industry regarding when your project should introduce a microservice architecture:
+There are two schools of thought on when to adopt microservices:
 
-* Option A: Monolith first, gradually replaced by microservice architecture as the architecture evolves.
-* Option B: Microservices first, to avoid large-scale architectural refactoring later.
+* **Option A, Monolith First**: Gradually evolve into microservices as the architecture matures.
+* **Option B, Microservice First**: Avoid large-scale refactoring later.
 
-In fact, as early as 2015, the tech guru [Martin Fowler](https://martinfowler.com/) gave a referenceable answer in his blog post [MicroservicePremium](https://martinfowler.com/bliki/MicroservicePremium.html):
+Technically, as early as 2015, [Martin Fowler](https://martinfowler.com/) provided a definitive answer in his blog post [Microservice Premium](https://martinfowler.com/bliki/MicroservicePremium.html):
 
-![MicroservicePremuim](https://s2.loli.net/2025/02/13/J1NDigFj7Rs36on.png)
+![Microservice Premium](https://s2.loli.net/2025/02/13/J1NDigFj7Rs36on.png)
 
-In the early days (around 2015), the cost and threshold for using microservices were high, and production efficiency was not as good as monolithic applications. However, as the system's business complexity gradually increased, the production efficiency of monolithic applications gradually decreased. When the critical point was reached, the advantages of microservices emerged, and their production efficiency began to exceed that of monolithic applications. Therefore, in 2015, weighing costs and benefits, most people chose a **monolith first** architectural approach.
+In 2015, microservices had high adoption costs and barriers; production efficiency was lower than for monoliths until a system reached a certain level of complexity. Once that "critical point" was hit, microservices became more efficient. Thus, in 2015, most chose **Monolith First**.
 
-#### The Birth of Netflix OSS
+#### Birth of Netflix OSS
 
-As early as 2015, when the CNCF foundation was just born, the community's microservice infrastructure was very imperfect. Netflix + Pivotal, as explorers of microservice practice, **implemented microservice architecture by providing many microservice infrastructure components at the application level**. The complete solution of microservice components provided by Netflix is called Netflix OSS (Open Source Software Center).
+When the CNCF Foundation was born in 2015, the microservice infrastructure was immature. Netflix and Pivotal, as pioneers, **implemented microservice architecture through application-level basic components**. This suite of solutions is known as Netflix OSS (Open Source Software Center).
 
 ![Netflix OSS Landscape](https://s2.loli.net/2025/02/13/3mbB2uUHp8QxPv6.png)
 
-#### Microservices First
+#### Microservice First
 
-Martin Fowler's viewpoint in 2015 is clearly no longer applicable to the modern system architecture of 2021. In recent years, with the rapid development of CNCF, cloud-native infrastructure has gradually improved and matured, and the cost of using microservices has decreased year by year. The cost of implementing microservices has trended towards monoliths and may even be superior in the future. My personal view is that **if microservices can solve the usage and learning cost issues, they will eventually replace monolithic applications completely.**
+Martin Fowler's 2015 view is less applicable to modern 2021 systems. With the rapid growth of CNCF, cloud native infrastructure has matured, lowering the cost of using microservices to the level of monoliths—or even lower. In my view, **if microservices can solve the cost of learning and use, they will eventually replace monolithic apps entirely**. From a long-term perspective, new projects should prioritize microservice architecture to ensure efficiency, scalability, and avoid massive future refactoring.
 
-### Technical selection for Microservices
+### Technology Selection for Microservices
 
-#### Selecting a Microservice Framework
+#### Frameowork Choices
 
-There are many microservice frameworks on the market. Most large companies currently have their own. Let's look at a few mainstream and representative ones:
+Many microservice frameworks exist. Most large companies have their own, but let's look at the most representative ones:
 
 * Dubbo (Alibaba)
 * Spring Cloud (Netflix)
 * Kubernetes (Google)
 
-We compare the mainstream frameworks across three dimensions: basic concerns of microservices, operational architecture, and product background.
+Let's compare them across three dimensions: basic concerns, O&M (Operation & Maintenance), and product background:
 
-![Comparison of mainstream frameworks](https://s2.loli.net/2025/02/13/28dJ1pTMUZtkn5E.jpg)
+![Framework Comparison](https://s2.loli.net/2025/02/13/28dJ1pTMUZtkn5E.jpg)
 
-Through horizontal comparison, we can see that both Dubbo and Spring Cloud have many disadvantages compared to Kubernetes. Compared to Alibaba's Dubbo and Netflix's Spring Cloud, Google's Kubernetes is the technical solution that provides a complete, one-stop microservice solution.
+Through horizontal comparison, we can see that both Dubbo and Spring Cloud have many disadvantages compared to Kubernetes. Unlike Alibaba's Dubbo or Netflix's Spring Cloud, Google's Kubernetes provides a complete, one-stop microservice solution.
 
 ![Kubernetes Solution](https://s2.loli.net/2025/02/13/CzVH17nKamUloEN.png)
 
-If using a house as a metaphor, the former are like unfurnished houses where you have to do your own decoration; Kubernetes is a fully decorated commodity house that solves all problems for you. Additionally, **building a Kubernetes cluster yourself is expensive, so it is recommended to use Kubernetes services provided by public cloud vendors.**
+If using housing as an analogy: the former are like "shell" apartments you must renovate yourself; Kubernetes is a "fully-furnished" home—every problem solved, just move in. Furthermore, **local Kubernetes setup is costly; it's recommended to use managed K8S services from public cloud providers**.
 
 #### Microservices and Gateways
 
-If you compare a distributed microservice system to a company, then the gateway is the company's reception. When a user wants to visit the company, they must register and verify their identity at the reception. This step is called **Gateway Authentication**. Based on the user's description of the task and the credentials they carry, the gateway leads them to the appropriate office. This step is called **Gateway Routing**. If there are too many users for one reception to handle, more windows will be opened to divert traffic; this step is called **Load Balancing at the Gateway level**. The gateway is the "front door" of microservices and is crucial.
+If a distributed microservice system is a company, the gateway is the front desk. Visitors must register and prove their identity (and maybe take a temperature check these days). This step is **Gateway Authentication**. Based on the visitor's mission, the front desk guides them to the correct office—**Gateway Routing**. If there are too many visitors, more windows are opened—**Gateway-level Load Balancing**. The gateway is the front door of your microservices and is absolutely critical.
 
-Advanced features of a gateway:
+Common gateway workflows:
 
-* Gateway throttling (closing the door when there are too many people).
-* Canary release (leading a small portion of users to a new office area to experience it).
-* Elastic scaling.
+<img src="https://s2.loli.net/2025/02/13/iyBYwzuOnGrQehV.png" alt="Gateway Workflow" style="zoom:67%;" />
 
-#### Microservices and Secure Authentication
+Beyond authentication, routing, and load balancing, gateways enable advanced features:
+
+* Rate Limiting (too many people; close the door or make them queue)
+* Canary Releases (guides a subset of users to experience new, yet-to-be-fully-released workspaces)
+* Elastic Scaling
+
+The gateway is the source of a microservice's elastic scaling capability. Since development costs for gateways aren't prohibitively high, many standalone products exist:
+
+![Mainstream Gateway Comparison](https://s2.loli.net/2025/02/13/Pr74txIjleFc8EB.png)
+
+#### Microservices and Security Authentication
 
 **Session Management in Early Distributed Monoliths**
 
-Early monolithic applications used server-side stored sessionid + cookie + filter to maintain user state. **However, such stateful services had many drawbacks**, such as state loss upon service restart and difficulty in horizontal scaling. Later, people began to put the user session state in storage middleware like Redis.
+Early monolithic apps managed session state via server-side Session IDs, Cookies, and filters. **However, stateful services have many drawbacks**, such as losing user state on restart and difficulty scaling horizontally. Later, monoliths began storing session state in middleware like Redis to solve these issues.
 
-**Auth-based Authentication in Microservices**
+![Redis Stored Sessions](https://s2.loli.net/2025/02/13/sG9RT8uq5QBbyOv.png)
 
-In microservice systems, the identity authentication module is extracted and handled by a separate service, usually called Auth Service. Access tokens are issued by Auth and authenticated uniformly by the gateway. This separation allow microservices to focus more on business. However, this may cause unnecessary performance loss as all requests go to Auth for verification. Is there a more light-weight solution? The answer is the very popular JWT (JSON Web Token) authentication. JWT combined with the RBAC (Role-Based Access Control) model is a mainstream lightweight authentication solution today.
+**Auth-based Schemes in Microservices**
 
-JWT is highly regarded and widely used because after the Auth service issues the token, the gateway can verify its validity without needing to request the Auth service again. The token itself can even contain a small amount of user information. You can decode it on sites like [JWT.io](https://jwt.io/).
+In microservices, identity authentication is extracted into a standalone "Auth Service." Access tokens are issued by Auth and verified by the gateway. Separation of concerns allows microservices to focus on business logic.
 
-#### Microservice Operations and Monitoring
+![Gateway Accessing Auth Service](https://s2.loli.net/2025/02/13/VqhDuYxw5C9Bjep.jpg)
+
+However, sending every request to the Auth Service for verification creates pressure and performance loss. Most applications don't need such a heavy security level. Is there a lightweight technology where tokens can be self-validated? Yes: JWT (JSON Web Token). JWT combined with the RBAC role model is a very popular lightweight solution.
+
+![RBAC+JWT](https://s2.loli.net/2025/02/13/2O38UN7gAGZhmQv.jpg)
+
+JWT is highly regarded because once issued, the gateway can verify its legitimacy independently, reducing requests to the Auth Service and improving performance. It can also self-contain a small amount of user info. You can use [JWT.IO](https://jwt.io/) to decode information from a JWT string:
+
+![JWT Info](https://s2.loli.net/2025/02/13/UO8Tj2Gw34ynVqL.jpg)
+
+JWT isn't perfect; here are its pros and cons:
+
+| Pros | Cons |
+| :--- | :--- |
+| Compact and lightweight | Once issued, cannot be manually revoked—it must expire |
+| Relieves Auth Service pressure; simplifies implementation | Larger payload means higher transmission overhead |
+
+**Summary**
+
+The RBAC role model + JWT scheme is the mainstream security architecture for microservices today, meeting most needs and serving as a best practice in enterprise production.
+
+#### Microservice O&M Monitoring
 
 **Production Ready**
 
-In software development, "Feature-Complete" is only a small part. What other stages are needed from finished coding to being "Production Ready"?
+Finally, let's talk about operations. We know being "Feature-Complete" is only a small part of development. What else is needed to be **Production Ready**?
 
-* Integration Testing: Accuracy, performance, and stress testing.
-* Log Management: Logs must be standardized and distinguish between Info, Warn, Error, etc., to facilitate collection and monitoring.
-* Monitoring and Alerting: Business indicators, application indicators, CPU, memory, disk, network IO, etc.
-* Call Chain Monitoring: Visualize call relationships and performance, find bottlenecks, and quickly locate problems.
-* High Availability: Backups, disaster recovery strategies, elastic mechanisms, etc.
+![Production Ready](https://s2.loli.net/2025/02/13/SVTov4pYHkL1NKQ.jpg)
 
-**EFK-based Log Collection**
+* **Integration Testing**: Accuracy, performance, and pressure testing.
+* **Log Management**: Standardized logs across levels (Info, Warning, Error) for easy collection, monitoring, and troubleshooting.
+* **Monitoring & Alerts**: Business, application, and infra metrics (CPU, Memory, Disk, Network IO).
+* **Distributed Tracing**: Visualizes relationships and performance, identifying bottlenecks and locating issues.
+* **High Availability**: Dual-machine backup, Master-Slave, multi-active redundancy, disaster recovery, and elastic mechanisms.
 
-Kubernetes recommends using EFK (Elasticsearch + Fluentd + Kibana) to collect logs. Fluentd sends the collected logs directly to Elasticsearch, which parses them for Kibana to display in a dashboard.
+Only when we ensure these requirements are met can we go to production and deliver value.
 
-**Distributed System Service Monitoring**
+**EFK Log Collection**
 
-The mainstream microservice monitoring system is built via Kubernetes + Prometheus. Prometheus discovers Kubernetes services, Alert Manager handles monitoring and alerting via Email/SMS, and Grafana displays various metrics.
+Microservice architectures on containers cannot rely on SSH to fetch logs. A unified collection mechanism is required. Kubernetes recommends EFK (Elasticsearch + Fluentd + Kibana):
 
-**Skywalking-based Distributed Link Tracking**
+![EFK in K8S](https://s2.loli.net/2025/02/13/9XwiUAD5zyRCuBQ.jpg)
 
-Skywalking is a non-intrusive distributed link tracking framework that can complete tracking without adding a single line of code.
+1. Fluentd sends collected logs to Elasticsearch (with Kafka as an optional buffer).
+2. Elasticsearch parses and filters logs.
+3. Kibana provides the dashboard for querying.
+
+**Prometheus Monitoring**
+
+The mainstream monitoring ecosystem for microservices uses Kubernetes + Prometheus:
+
+![K8S and Prometheus](https://s2.loli.net/2025/02/13/lyqLi5VjSZCeAa4.jpg)
+
+1. Prometheus discovers K8S services.
+2. Alert Manager handles email/SMS alerts.
+3. Grafana visualizes the metrics.
+
+**SkyWalking Distributed Tracing**
+
+SkyWalking is a non-intrusive tracing framework that works without code changes. It became an Apache Top-Level Project in 2019. Its author, Wu Sheng, became the first Chinese director of the Apache Software Foundation.
+
+![SkyWalking Principle](https://s2.loli.net/2025/02/13/tcLm45wlEx6HKTV.jpg)
+
+SkyWalking trace visualization:
+
+![SkyWalking Trace Visualization](https://s2.loli.net/2025/02/13/EX36VSi8zRpIF2P.jpg)
 
 ### Summary
 
-This article has covered why programmers should embrace cloud-native, the revolutionary changes it brings to traditional monolithic applications, and the working principles, architectures, and operations of microservices. In real production-grade cloud-native applications, there are even more factors to consider, such as:
+This post detailed the history of Cloud Native and why programmers should embrace it. We discussed the disruptive benefits cloud-native systems bring over traditional monoliths, as well as principles for microservice layout and O&M. In real production-grade apps, much more must be considered:
 
 * HTTPS
 * Coding standards, test coverage, E2E testing
-* Monitoring: Log/Trace/Metrics, business metrics
+* Monitoring: Log/Trace/Metrics and business metrics
 * Continuous Integration: CI/CD pipelines
-* Thorough README documentation
+* Comprehensive README documentation
 
-I look forward to learning and communicating with all of you. Thank you.
+I look forward to learning and communicating more with all of you. Thank you.
+
+**References:**
+
+* [Production-Ready vs Feature-Complete: What’s the Difference?](https://www.verypossible.com/insights/production-ready-vs-feature-complete-whats-the-difference)
+* [ELK, EFK, Prometheus, SkyWalking, K8s Combinations](https://m.tqwba.com/x_d/jishu/427732.html)
+* [Spring Boot and Kubernetes Cloud Native Microservice Practices](https://time.geekbang.org/course/intro/100031401?tab=catalog)
