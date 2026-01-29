@@ -19,6 +19,9 @@ The core philosophy is **gamification** of calorie management: helping users con
 
 - **Daily Limit Management**: Automatically refreshes calorie credit at 0:00 daily. Visualizes remaining balance and provides alerts when the limit is low.
 - **AI Food Recognition**: Integrated with **Zhipu AI GLM-4.6V**. Simply take a photo of your food to intelligently analyze the type and portion, automatically estimating calories.
+
+  ![AI Food Recognition](/images/projects/calorie-credit-ai-scan.jpg)
+
 - **Scientific Calculation**: Calculates Basal Metabolic Rate (BMR) based on the **Mifflin-St Jeor Equation**, combined with physical activity levels to determine Total Daily Energy Expenditure (TDEE).
 - **Health Indicators**: Automatically calculates age and BMI based on user input, providing health status references.
 - **Consumption Records**: Track every meal's calorie consumption like a ledger, with support for editing, deleting, and sharing.
