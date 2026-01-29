@@ -9,6 +9,8 @@ categories = ["Project"]
 
 ### Project Introduction
 
+![Visual NCE Homepage](/images/projects/visual-nce-landing.png)
+
 **Visual NCE** is an interactive English learning project. It is designed to provide a more efficient and interesting digital learning experience for the classic "New Concept English" (NCE) textbooks.
 
 Through high-quality interactive scenes and scripts, Visual NCE helps users achieve immersive visual learning, making dull texts come alive.
@@ -17,6 +19,13 @@ Through high-quality interactive scenes and scripts, Visual NCE helps users achi
 
 - **Full Coverage**: Supports structured display for all four volumes of NCE.
 - **Immersive Experience**: Combines beautiful illustrations and audio for a dual visual and auditory learning experience.
+
+  ![Visual NCE Lesson View](/images/projects/visual-nce-lesson.png)
+
+- **In-depth Analysis**: Provides detailed breakdowns of vocabulary, grammar, and sentence structures.
+
+  ![Visual NCE Analysis](/images/projects/visual-nce-analysis.png)
+
 - **Tech-Driven**: Built with a modern frontend stack to ensure a smooth user experience.
 
 ### Tech Stack
