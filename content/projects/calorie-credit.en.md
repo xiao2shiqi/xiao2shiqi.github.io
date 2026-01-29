@@ -7,6 +7,8 @@ tags = ["WeChat Mini Program", "uni-app", "AI", "Vue 3", "Health"]
 categories = ["Project"]
 +++
 
+![Calorie Credit Interface](/images/projects/calorie-credit-main.png)
+
 ### Project Introduction
 
 **Calorie Credit** is a health management WeChat Mini Program based on the concept of daily calorie limits.

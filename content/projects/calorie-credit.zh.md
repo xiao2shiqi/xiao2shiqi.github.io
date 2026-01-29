@@ -7,6 +7,8 @@ tags = ["WeChat Mini Program", "uni-app", "AI", "Vue 3", "Health"]
 categories = ["Project"]
 +++
 
+![卡路里信用小程序界面](/images/projects/calorie-credit-main.png)
+
 ### 项目介绍
 
 **卡路里信用 (Calorie Credit)** 是一款基于每日卡路里额度的健康管理微信小程序。
