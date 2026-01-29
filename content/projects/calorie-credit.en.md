@@ -38,6 +38,12 @@ This project rigorously follows biological principles:
 2.  **TDEE Calculation**: Calculates real daily energy requirements based on physical activity levels.
 3.  **Dynamic Age Adjustment**: Accounts for metabolic decline due to muscle loss, providing precise suggestions for users of different ages.
 
+### Try it Now
+
+Scan the QR code below with WeChat to try it out:
+
+![Calorie Credit QR Code](/images/projects/calorie-credit-qr.jpg)
+
 ---
 
 > By transforming the abstract concept of calories into intuitive "credit limits," Calorie Credit is dedicated to helping users easily establish healthy eating habits.
