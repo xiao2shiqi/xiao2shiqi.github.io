@@ -4,12 +4,6 @@ draft = false
 title = 'Use Codex Like OpenAI Engineers: A Prompt Workflow You Can Copy Today'
 description = 'A practical breakdown of the official PDF: Ask before Code, 7 high-frequency scenarios, plus an AGENTS.md template you can reuse.'
 tags = ["AI Coding", "Codex", "Prompt Engineering"]
-[cover]
-image = "/images/posts/openai-codex-prompt-workflow/cover.png"
-alt = "OpenAI Codex prompt workflow"
-hidden = false
-hiddenInList = false
-hiddenInSingle = false
 +++
 
 ![How OpenAI engineers use Codex in daily work](/images/posts/openai-codex-prompt-workflow/image-20260301174504763.png)

@@ -4,12 +4,6 @@ draft = false
 title = '照抄 OpenAI 工程师的 Codex 用法：一套可直接复制的 Prompt 工作流'
 description = '把官方 PDF 拆成一份可直接照抄的说明书：先 Ask 再 Code，7 类高频场景 Prompt，外加一个 AGENTS.md 模板。'
 tags = ["AI 编程", "Codex", "Prompt Engineering"]
-[cover]
-image = "/images/posts/openai-codex-prompt-workflow/cover.png"
-alt = "OpenAI Codex Prompt 工作流"
-hidden = false
-hiddenInList = false
-hiddenInSingle = false
 +++
 
 ![OpenAI 工程师使用 Codex 的日常](/images/posts/openai-codex-prompt-workflow/image-20260301174504763.png)
