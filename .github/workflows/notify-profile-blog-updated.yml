@@ -1,0 +1,21 @@
+name: Notify profile repo to refresh latest blog posts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "content/posts/**"
+      - "hugo.toml"
+  workflow_dispatch:
+
+jobs:
+  dispatch-profile-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger xiao2shiqi profile README update
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PROFILE_REPO_DISPATCH_TOKEN }}
+          repository: xiao2shiqi/xiao2shiqi
+          event-type: blog_updated
