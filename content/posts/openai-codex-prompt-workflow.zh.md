@@ -175,7 +175,3 @@ OpenAI 在文档最后提到，Codex 还处于 research preview 阶段。
 工具是 Codex，但真正起作用的是“先 Ask 再 Code”的节奏、持续迭代环境的耐心、把上下文写清楚的习惯，以及在仓库里维护 `AGENTS.md` 的意识。
 
 这些东西，换哪个工具都适用。
-
-如果你也在用 AI 工具做编程工作流的实践和探索，欢迎交流。共同学习，共同进步。
-
-![AI coding 交流群二维码](/images/posts/openai-codex-prompt-workflow/community_qr.jpg)

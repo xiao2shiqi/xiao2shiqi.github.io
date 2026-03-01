@@ -169,7 +169,3 @@ At the same time, they report real internal impact: faster completion of neglect
 The larger lesson is not “use a smarter tool.” It is “adopt a better workflow.”
 
 Tool choice may change. But Ask-before-Code, iterative environment hardening, explicit context, and a maintained `AGENTS.md` stay valuable.
-
-If you are also building an AI-assisted engineering workflow, this is a practical baseline worth trying.
-
-![AI coding community QR code](/images/posts/openai-codex-prompt-workflow/community_qr.jpg)
