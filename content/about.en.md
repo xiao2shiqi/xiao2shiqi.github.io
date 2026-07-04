@@ -58,9 +58,11 @@ If you are interested in English learning or the technical implementation of thi
 
 If you want to communicate with me about technology or have any suggestions, feel free to contact me:
 
-- **WeChat**: 18198971094
+- **WeChat**: 18198971094 (scan the QR code below)
 - **Email**: [xiaobin.phoenix@gmail.com](mailto:xiaobin.phoenix@gmail.com)
 - **GitHub**: [@xiao2shiqi](https://github.com/xiao2shiqi)
 - **X (Twitter)**: [@xiao2shiqi](http://x.com/xiao2shiqi)
+
+<img src="/images/wechat_qr.png" alt="WeChat QR code" style="width: 220px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
 
 Thanks for visiting!

@@ -22,6 +22,8 @@ Through high-quality interactive scenes and scripts, Visual NCE helps users achi
 
   ![Visual NCE Lesson View](/images/projects/visual-nce-lesson.png)
 
+- **Cambridge Grammar Map**: All 168 lessons of NCE 1/2 are mapped to the corresponding units of Essential/English Grammar in Use, so you can practise each grammar point right after the lesson.
+- **Intensive Listening Tools**: Blind-listening mode (blurred subtitles, reveal sentence by sentence), shadowing pauses after each sentence, and automatic progress resume.
 - **In-depth Analysis**: Provides detailed breakdowns of vocabulary, grammar, and sentence structures.
 
   ![Visual NCE Analysis](/images/projects/visual-nce-analysis.png)

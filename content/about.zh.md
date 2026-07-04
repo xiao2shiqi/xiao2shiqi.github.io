@@ -58,9 +58,11 @@ title = '关于我'
 
 如果你想跟我交流技术或者有任何建议，欢迎通过以下方式联系我：
 
-- **微信**: 18198971094
+- **微信**: 18198971094（扫码加好友更方便）
 - **Email**: [xiaobin.phoenix@gmail.com](mailto:xiaobin.phoenix@gmail.com)
 - **GitHub**: [@xiao2shiqi](https://github.com/xiao2shiqi)
 - **X (Twitter)**: [@xiao2shiqi](http://x.com/xiao2shiqi)
+
+<img src="/images/wechat_qr.png" alt="微信二维码" style="width: 220px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
 
 感谢你的访问！

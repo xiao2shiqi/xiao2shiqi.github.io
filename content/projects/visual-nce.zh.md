@@ -22,6 +22,8 @@ categories = ["Project"]
 
   ![Visual NCE Lesson View](/images/projects/visual-nce-lesson.png)
 
+- **剑桥语法地图**：NCE1/NCE2 全部 168 课逐课映射《剑桥初级/中级英语语法》的对应 Unit，课文学完直接翻书做配套练习。
+- **精听工具**：盲听模式（字幕遮罩、逐句揭示）、跟读停顿（每句播完自动留出跟读时间）、进度记忆与续播。
 - **深度解析**：提供单词、语法和句子的详细拆解分析。
 
   ![Visual NCE Analysis](/images/projects/visual-nce-analysis.png)

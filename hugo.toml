@@ -57,8 +57,8 @@ defaultContentLanguage = "zh"
 
     [[params.socialIcons]]
         name = "wechat"
-        title = "WeChat: 18198971094"
-        url = "#"
+        title = "WeChat: 18198971094（点击查看二维码）"
+        url = "/about/"
 
 [languages.zh]
     languageName = "中文"
@@ -69,28 +69,32 @@ defaultContentLanguage = "zh"
     
     [languages.zh.params.homeInfoParams]
         Title = "欢迎来到我的博客"
-        Content = "<div class='home-info-github'> <img src='/images/avatar.jpg' alt='肖斌'> <div> <p>你好，我是肖斌。这里记录我的技术笔记与思考。</p> <p>了解更多关于我以及我的项目 <a href='https://nce.xiao27.com/'>Visual NCE</a>，请点击这里。</p> <p>📱 <b>微信：18198971094</b></p> </div> </div> <style>.home-info-github { display: flex; align-items: center; gap: 40px; text-align: left; margin: 20px 0; } .home-info-github img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } .home-info-github div { flex: 1; } @media (max-width: 600px) { .home-info-github { flex-direction: column; text-align: center; } }</style>"
+        Content = "<div class='home-info-github'> <img src='/images/avatar.jpg' alt='肖斌'> <div> <p>你好，我是肖斌。这里记录我的技术笔记与思考。</p> <p>我做了一个免费的英语学习站 <a href='https://nce.xiao27.com/'>Visual NCE</a>：用吉卜力风格插画重构《新概念英语》，音画同步 + 逐句精听，欢迎体验。更多项目见<a href='/projects/'>作品集</a>。</p> <p>📱 <b>微信：18198971094</b>（<a href='/about/'>扫码加好友</a>）</p> </div> </div> <style>.home-info-github { display: flex; align-items: center; gap: 40px; text-align: left; margin: 20px 0; } .home-info-github img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } .home-info-github div { flex: 1; } @media (max-width: 600px) { .home-info-github { flex-direction: column; text-align: center; } }</style>"
 
     [[languages.zh.menu.main]]
         name = "文章"
         url = "/posts"
         weight = 1
     [[languages.zh.menu.main]]
+        name = "Visual NCE"
+        url = "https://nce.xiao27.com/"
+        weight = 2
+    [[languages.zh.menu.main]]
         name = "作品集"
         url = "/projects"
-        weight = 2
+        weight = 3
     [[languages.zh.menu.main]]
         name = "标签"
         url = "/tags"
-        weight = 3
+        weight = 4
     [[languages.zh.menu.main]]
         name = "搜索"
         url = "/search"
-        weight = 4
+        weight = 5
     [[languages.zh.menu.main]]
         name = "关于"
         url = "/about"
-        weight = 5
+        weight = 6
 
 [languages.en]
     languageName = "English"
@@ -101,25 +105,29 @@ defaultContentLanguage = "zh"
 
     [languages.en.params.homeInfoParams]
         Title = "Welcome to My Blog"
-        Content = "<div class='home-info-github'> <img src='/images/avatar.jpg' alt='Xiao Bin'> <div> <p>Hi, I am Xiao Bin. Here I record my technical notes and thoughts.</p> <p>Check out my <a href='/en/about'>About</a> page to learn more about me and my projects like <a href='https://nce.xiao27.com/'>Visual NCE</a>.</p> <p>📱 <b>WeChat: 18198971094</b></p> </div> </div> <style>.home-info-github { display: flex; align-items: center; gap: 40px; text-align: left; margin: 20px 0; } .home-info-github img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } .home-info-github div { flex: 1; } @media (max-width: 600px) { .home-info-github { flex-direction: column; text-align: center; } }</style>"
+        Content = "<div class='home-info-github'> <img src='/images/avatar.jpg' alt='Xiao Bin'> <div> <p>Hi, I am Xiao Bin. Here I record my technical notes and thoughts.</p> <p>I built <a href='https://nce.xiao27.com/'>Visual NCE</a>, a free English learning site that reimagines New Concept English with Ghibli-style illustrations and sentence-level audio sync. See more in my <a href='/en/projects/'>Portfolio</a>.</p> <p>📱 <b>WeChat: 18198971094</b> (<a href='/en/about/'>QR code</a>)</p> </div> </div> <style>.home-info-github { display: flex; align-items: center; gap: 40px; text-align: left; margin: 20px 0; } .home-info-github img { width: 180px; height: 180px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } .home-info-github div { flex: 1; } @media (max-width: 600px) { .home-info-github { flex-direction: column; text-align: center; } }</style>"
 
     [[languages.en.menu.main]]
         name = "Posts"
         url = "/posts"
         weight = 1
     [[languages.en.menu.main]]
+        name = "Visual NCE"
+        url = "https://nce.xiao27.com/"
+        weight = 2
+    [[languages.en.menu.main]]
         name = "Portfolio"
         url = "/projects"
-        weight = 2
+        weight = 3
     [[languages.en.menu.main]]
         name = "Tags"
         url = "/tags"
-        weight = 3
+        weight = 4
     [[languages.en.menu.main]]
         name = "Search"
         url = "/search"
-        weight = 4
+        weight = 5
     [[languages.en.menu.main]]
         name = "About"
         url = "/about"
-        weight = 5
+        weight = 6
